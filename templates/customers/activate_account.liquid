@@ -1,0 +1,105 @@
+<div class="customer-activate section-spacing">
+  <div class="page-width">
+    <div class="customer-activate__wrapper" style="max-width: 500px; margin: 0 auto;">
+      <h1 class="customer-activate__title h2">{{ 'customer.activate_account.title' | t }}</h1>
+      <p class="customer-activate__subtext">{{ 'customer.activate_account.subtext' | t }}</p>
+
+      {%- form 'activate_customer_password', novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <div class="form__message form__message--error" role="alert">
+            <h2 class="form__message-title h3">
+              {{ 'templates.contact.form.error_heading' | t }}
+            </h2>
+            <ul>
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="field">
+          <label for="ActivatePassword">{{ 'customer.activate_account.password' | t }}</label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="ActivatePassword"
+            autocomplete="new-password"
+            {% if form.errors contains 'password' %}
+              aria-invalid="true"
+              aria-describedby="ActivatePassword-error"
+            {% endif %}
+            required
+          >
+          {%- if form.errors contains 'password' -%}
+            <small id="ActivatePassword-error" class="form__message">
+              {{ form.errors.translated_fields['password'] | capitalize }} {{ form.errors.messages['password'] }}
+            </small>
+          {%- endif -%}
+        </div>
+
+        <div class="field">
+          <label for="ActivatePasswordConfirmation">{{ 'customer.activate_account.password_confirm' | t }}</label>
+          <input
+            type="password"
+            name="customer[password_confirmation]"
+            id="ActivatePasswordConfirmation"
+            autocomplete="new-password"
+            {% if form.errors contains 'password_confirmation' %}
+              aria-invalid="true"
+              aria-describedby="ActivatePasswordConfirmation-error"
+            {% endif %}
+            required
+          >
+          {%- if form.errors contains 'password_confirmation' -%}
+            <small id="ActivatePasswordConfirmation-error" class="form__message">
+              {{ form.errors.translated_fields['password_confirmation'] | capitalize }} {{ form.errors.messages['password_confirmation'] }}
+            </small>
+          {%- endif -%}
+        </div>
+
+        <div class="customer-activate__actions">
+          <button type="submit" class="button button--primary button--full-width">
+            {{ 'customer.activate_account.submit' | t }}
+          </button>
+        </div>
+
+        <div class="customer-activate__decline">
+          <a href="{{ routes.account_login_url }}">
+            {{ 'customer.activate_account.cancel' | t }}
+          </a>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .customer-activate__subtext {
+    margin-bottom: 30px;
+    color: #666;
+  }
+  
+  .customer-activate__actions {
+    margin: 30px 0 20px;
+  }
+  
+  .customer-activate__decline {
+    text-align: center;
+  }
+  
+  .customer-activate__decline a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  
+  .customer-activate__decline a:hover {
+    text-decoration: underline;
+  }
+</style>

@@ -1,0 +1,46 @@
+<div class="cart-footer">
+  <div class="page-width">
+    <div class="cart-footer__content">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'subtotal' -%}
+            <div class="cart-footer__subtotal" {{ block.shopify_attributes }}>
+              <div class="cart-footer__subtotal-row">
+                <span class="cart-footer__subtotal-label">{{ 'sections.cart.subtotal' | t }}</span>
+                <span class="cart-footer__subtotal-price">{{ cart.total_price | money }}</span>
+              </div>
+              <p class="cart-footer__note">{{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: routes.cart_url }}</p>
+            </div>
+
+          {%- when 'buttons' -%}
+            <div class="cart-footer__buttons" {{ block.shopify_attributes }}>
+              <button type="submit" name="checkout" class="button button--primary button--full-width" form="cart">
+                {{ 'sections.cart.checkout' | t }}
+              </button>
+            </div>
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart Footer",
+  "tag": "section",
+  "class": "section-cart-footer",
+  "blocks": [
+    {
+      "type": "subtotal",
+      "name": "Subtotal",
+      "limit": 1
+    },
+    {
+      "type": "buttons",
+      "name": "Checkout Buttons",
+      "limit": 1
+    }
+  ]
+}
+{% endschema %}

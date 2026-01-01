@@ -1,0 +1,89 @@
+{%- if section.settings.show_announcement -%}
+  <div class="announcement-bar" role="region" aria-label="Announcement">
+    <div class="page-width">
+      <div class="announcement-bar__content">
+        {%- if section.settings.announcement_link != blank -%}
+          <a href="{{ section.settings.announcement_link }}" class="announcement-bar__link">
+            {%- if section.settings.announcement_text != blank -%}
+              {{ section.settings.announcement_text }}
+            {%- endif -%}
+          </a>
+        {%- else -%}
+          {%- if section.settings.announcement_text != blank -%}
+            <p class="announcement-bar__text">{{ section.settings.announcement_text }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+<style>
+  .announcement-bar {
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+    padding: 12px 0;
+    text-align: center;
+    font-size: 1.4rem;
+  }
+  
+  .announcement-bar__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .announcement-bar__text {
+    margin: 0;
+  }
+  
+  .announcement-bar__link {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .announcement-bar__link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "tag": "section",
+  "class": "section-announcement-bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "Welcome to our store"
+    },
+    {
+      "type": "url",
+      "id": "announcement_link",
+      "label": "Announcement link",
+      "info": "Optional"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#d4a574"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ]
+}
+{% endschema %}

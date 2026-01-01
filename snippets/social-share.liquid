@@ -1,0 +1,44 @@
+{% liquid
+  assign share_url = request.origin | append: share_permalink
+  assign encoded_url = share_url | url_encode
+  assign encoded_title = share_title | url_encode
+%}
+
+<div class="social-share">
+  <span class="social-share__label">{{ 'general.social.share' | t }}</span>
+  <ul class="social-share__list list-unstyled" role="list">
+    <li class="social-share__item">
+      <a
+        href="https://www.facebook.com/sharer.php?u={{ encoded_url }}"
+        class="social-share__link"
+        target="_blank"
+        rel="noopener"
+        aria-label="{{ 'general.social.share_on_facebook' | t }}"
+      >
+        {% render 'icon-facebook' %}
+      </a>
+    </li>
+    <li class="social-share__item">
+      <a
+        href="https://twitter.com/share?text={{ encoded_title }}&url={{ encoded_url }}"
+        class="social-share__link"
+        target="_blank"
+        rel="noopener"
+        aria-label="{{ 'general.social.share_on_twitter' | t }}"
+      >
+        {% render 'icon-twitter' %}
+      </a>
+    </li>
+    <li class="social-share__item">
+      <a
+        href="https://pinterest.com/pin/create/button/?url={{ encoded_url }}&media={{ share_image | image_url: width: 1024 }}&description={{ encoded_title }}"
+        class="social-share__link"
+        target="_blank"
+        rel="noopener"
+        aria-label="{{ 'general.social.share_on_pinterest' | t }}"
+      >
+        {% render 'icon-pinterest' %}
+      </a>
+    </li>
+  </ul>
+</div>

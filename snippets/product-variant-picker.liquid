@@ -1,0 +1,53 @@
+{% liquid
+  assign picker_type = block.settings.picker_type
+%}
+
+<variant-selects class="no-js-hidden" data-section="{{ section.id }}" data-url="{{ product.url }}">
+  {%- for option in product.options_with_values -%}
+    <div class="product-form__input product-form__input--{{ picker_type }}">
+      <label for="Option-{{ section.id }}-{{ forloop.index0 }}">
+        {{ option.name }}
+      </label>
+      
+      {%- if picker_type == 'button' -%}
+        <fieldset class="variant-input-wrapper">
+          <legend class="visually-hidden">{{ option.name }}</legend>
+          {%- for value in option.values -%}
+            <input
+              type="radio"
+              id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+              name="{{ option.name }}"
+              value="{{ value | escape }}"
+              form="{{ product_form_id }}"
+              {% if option.selected_value == value %}checked{% endif %}
+              class="variant-input visually-hidden"
+            >
+            <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="variant-button">
+              {{ value }}
+            </label>
+          {%- endfor -%}
+        </fieldset>
+      {%- else -%}
+        <select
+          id="Option-{{ section.id }}-{{ forloop.index0 }}"
+          class="variant-select"
+          name="options[{{ option.name | escape }}]"
+          form="{{ product_form_id }}"
+        >
+          {%- for value in option.values -%}
+            <option
+              value="{{ value | escape }}"
+              {% if option.selected_value == value %}selected="selected"{% endif %}
+            >
+              {{ value }}
+            </option>
+          {%- endfor -%}
+        </select>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+
+  <script type="application/json">
+    {{ product.variants | json }}
+  </script>
+</variant-selects>

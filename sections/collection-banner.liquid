@@ -1,0 +1,67 @@
+{% liquid
+  assign show_collection_description = section.settings.show_collection_description
+  assign show_collection_image = section.settings.show_collection_image
+%}
+
+{%- if show_collection_image and collection.image -%}
+  <div class="collection-banner collection-banner--with-image">
+    <div class="collection-banner__media">
+      <img
+        srcset="
+          {%- if collection.image.width >= 375 -%}{{ collection.image | image_url: width: 375 }} 375w,{%- endif -%}
+          {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
+          {%- if collection.image.width >= 1100 -%}{{ collection.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+          {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+          {{ collection.image | image_url }} {{ collection.image.width }}w
+        "
+        sizes="100vw"
+        src="{{ collection.image | image_url: width: 1500 }}"
+        loading="eager"
+        alt="{{ collection.image.alt | escape }}"
+        width="{{ collection.image.width }}"
+        height="{{ collection.image.height }}"
+      >
+    </div>
+    <div class="collection-banner__content page-width">
+      <h1 class="collection-banner__title h1">{{ collection.title | escape }}</h1>
+      {%- if show_collection_description and collection.description != blank -%}
+        <div class="collection-banner__description rte">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- else -%}
+  <div class="collection-banner section-spacing">
+    <div class="page-width">
+      <h1 class="collection-banner__title h1">{{ collection.title | escape }}</h1>
+      {%- if show_collection_description and collection.description != blank -%}
+        <div class="collection-banner__description rte">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "tag": "section",
+  "class": "section-collection-banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,105 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign show_name_field = section.settings.show_name_field
+%}
+
+<div class="newsletter section-spacing">
+  <div class="page-width">
+    <div class="newsletter__wrapper">
+      {%- if heading != blank -%}
+        <h2 class="newsletter__heading h2 text-center">{{ heading | escape }}</h2>
+      {%- endif -%}
+      
+      {%- if subheading != blank -%}
+        <p class="newsletter__subheading text-center">{{ subheading | escape }}</p>
+      {%- endif -%}
+
+      {% form 'customer', class: 'newsletter__form' %}
+        {%- if form.posted_successfully? -%}
+          <div class="newsletter__success" role="status">
+            <span class="newsletter__success-icon">{% render 'icon-success' %}</span>
+            <span class="newsletter__success-text">{{ 'sections.newsletter.success' | t }}</span>
+          </div>
+        {%- else -%}
+          <div class="newsletter__fields">
+            {%- if show_name_field -%}
+              <div class="newsletter__field">
+                <label for="newsletter-name" class="visually-hidden">{{ 'sections.newsletter.name_label' | t }}</label>
+                <input
+                  type="text"
+                  name="contact[first_name]"
+                  id="newsletter-name"
+                  class="newsletter__input"
+                  placeholder="{{ 'sections.newsletter.name_placeholder' | t }}"
+                  autocomplete="given-name"
+                >
+              </div>
+            {%- endif -%}
+            
+            <div class="newsletter__field newsletter__field--email">
+              <label for="newsletter-email" class="visually-hidden">{{ 'sections.newsletter.email_label' | t }}</label>
+              <input
+                type="email"
+                name="contact[email]"
+                id="newsletter-email"
+                class="newsletter__input"
+                placeholder="{{ 'sections.newsletter.email_placeholder' | t }}"
+                autocomplete="email"
+                required
+                aria-required="true"
+              >
+            </div>
+            
+            <div class="newsletter__button-wrapper">
+              <button type="submit" class="button button--primary newsletter__button" name="commit">
+                {{ 'sections.newsletter.button_label' | t }}
+              </button>
+            </div>
+          </div>
+
+          {%- if form.errors -%}
+            <div class="newsletter__error" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+
+        <input type="hidden" name="contact[tags]" value="newsletter">
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join Our Beauty Community"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Subscribe to get special offers, beauty tips, and exclusive updates."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_name_field",
+      "label": "Show name field",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+
+{
+  "current": {
+    "logo": "shopify://shop_images/generate-a-logo-for-this-project_1fccac38-3dc7-4ef7-95d5-4d0e355615c0.png",
+    "color_primary": "#d4a574",
+    "color_secondary": "#b8956a",
+    "color_accent": "#e8b4b8",
+    "color_background": "#ffffff",
+    "color_text": "#2c2c2c",
+    "color_border": "#e5e5e5",
+    "type_header_font": "assistant_n4",
+    "type_body_font": "assistant_n4",
+    "page_width": 1200,
+    "button_border_radius": 4,
+    "currency_code_enabled": false,
+    "cart_type": "page",
+    "cart_notes_enable": false,
+    "product_show_vendor": false,
+    "product_show_sku": false,
+    "product_image_size": "medium",
+    "predictive_search_enabled": true,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "footer_text": "<p>Your trusted source for premium beauty and skincare products.</p>",
+          "show_social": true,
+          "footer_menu": "footer",
+          "footer_menu_heading": "Quick Links",
+          "show_contact": true,
+          "contact_heading": "Contact Us",
+          "contact_email": "",
+          "contact_phone": "",
+          "contact_address": "",
+          "show_payment_icons": true
+        }
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {
+          "show_announcement": true,
+          "announcement_text": "Welcome to our store",
+          "announcement_link": "",
+          "background_color": "#d4a574",
+          "text_color": "#ffffff"
+        }
+      }
+    },
+    "content_for_index": []
+  }
+}

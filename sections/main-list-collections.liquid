@@ -1,0 +1,184 @@
+{% liquid
+  assign title = section.settings.title
+  assign sort = section.settings.sort
+%}
+
+<div class="main-list-collections section-spacing">
+  <div class="page-width">
+    {%- if title != blank -%}
+      <h1 class="main-list-collections__title h1 text-center">{{ title }}</h1>
+    {%- endif -%}
+
+    <div class="main-list-collections__grid grid grid--3-col grid--2-col-tablet-down">
+      {%- liquid
+        case sort
+          when 'products_high', 'products_low'
+            assign collections = collections | sort: 'all_products_count'
+          when 'date', 'date_reversed'
+            assign collections = collections | sort: 'published_at'
+          else
+            assign collections = collections | sort: 'title'
+        endcase
+
+        if sort == 'products_high' or sort == 'date_reversed' or sort == 'alphabetical_reversed'
+          assign collections = collections | reverse
+        endif
+      -%}
+
+      {%- for collection in collections -%}
+        <div class="main-list-collections__item">
+          <a href="{{ collection.url }}" class="collection-list-card">
+            <div class="collection-list-card__image">
+              {%- if collection.image != blank -%}
+                <img
+                  srcset="
+                    {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
+                    {{ collection.image | image_url }} {{ collection.image.width }}w
+                  "
+                  src="{{ collection.image | image_url: width: 535 }}"
+                  sizes="(min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc(100vw - 35px)"
+                  alt="{{ collection.image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ collection.image.width }}"
+                  height="{{ collection.image.height }}"
+                >
+              {%- elsif collection.products.first and collection.products.first.featured_image -%}
+                <img
+                  srcset="
+                    {%- if collection.products.first.featured_image.width >= 165 -%}{{ collection.products.first.featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if collection.products.first.featured_image.width >= 360 -%}{{ collection.products.first.featured_image | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if collection.products.first.featured_image.width >= 535 -%}{{ collection.products.first.featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+                    {{ collection.products.first.featured_image | image_url }} {{ collection.products.first.featured_image.width }}w
+                  "
+                  src="{{ collection.products.first.featured_image | image_url: width: 535 }}"
+                  sizes="(min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc(100vw - 35px)"
+                  alt="{{ collection.products.first.featured_image.alt | escape }}"
+                  loading="lazy"
+                  width="{{ collection.products.first.featured_image.width }}"
+                  height="{{ collection.products.first.featured_image.height }}"
+                >
+              {%- else -%}
+                <div class="placeholder-svg">
+                  {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg__image' }}
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="collection-list-card__content">
+              <h3 class="collection-list-card__title">{{ collection.title }}</h3>
+              {%- if collection.all_products_count > 0 -%}
+                <p class="collection-list-card__count">{{ collection.all_products_count }} products</p>
+              {%- endif -%}
+            </div>
+          </a>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .main-list-collections__title {
+    margin-bottom: 40px;
+  }
+  
+  .collection-list-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: var(--transition);
+    height: 100%;
+  }
+  
+  .collection-list-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .collection-list-card__image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+  }
+  
+  .collection-list-card__image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+  
+  .collection-list-card:hover .collection-list-card__image img {
+    transform: scale(1.05);
+  }
+  
+  .collection-list-card__content {
+    text-align: center;
+  }
+  
+  .collection-list-card__title {
+    font-family: var(--font-heading-family);
+    font-size: 2rem;
+    margin: 0 0 5px;
+  }
+  
+  .collection-list-card__count {
+    font-size: 1.4rem;
+    color: #666;
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collections List",
+  "tag": "section",
+  "class": "section-list-collections",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "sort",
+      "label": "Sort collections by",
+      "options": [
+        {
+          "value": "alphabetical",
+          "label": "Alphabetically, A-Z"
+        },
+        {
+          "value": "alphabetical_reversed",
+          "label": "Alphabetically, Z-A"
+        },
+        {
+          "value": "date_reversed",
+          "label": "Date, new to old"
+        },
+        {
+          "value": "date",
+          "label": "Date, old to new"
+        },
+        {
+          "value": "products_high",
+          "label": "Product count, high to low"
+        },
+        {
+          "value": "products_low",
+          "label": "Product count, low to high"
+        }
+      ],
+      "default": "alphabetical"
+    }
+  ]
+}
+{% endschema %}

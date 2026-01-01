@@ -1,0 +1,95 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "product-main",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "ingredients": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Ingredients",
+            "icon": "leaf",
+            "content": "<p>Natural and organic ingredients carefully selected for your skin. Contains essential oils, botanical extracts, and nourishing vitamins.</p>",
+            "page": ""
+          }
+        },
+        "how_to_use": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "How to Use",
+            "icon": "heart",
+            "content": "<p>Apply a small amount to clean skin. Gently massage in circular motions until fully absorbed. Use morning and evening for best results.</p>",
+            "page": ""
+          }
+        },
+        "shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "icon": "truck",
+            "content": "<p>Free shipping on orders over $50. Standard delivery takes 3-5 business days. Returns accepted within 30 days of purchase. Items must be unused and in original packaging.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "description",
+        "ingredients",
+        "how_to_use",
+        "shipping"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "gallery_layout": "thumbnail_slider",
+        "media_size": "medium"
+      }
+    },
+    "related_products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "You May Also Like",
+        "collection": "",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related_products"
+  ]
+}

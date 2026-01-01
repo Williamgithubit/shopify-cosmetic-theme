@@ -1,0 +1,155 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign collections_per_row = section.settings.collections_per_row
+%}
+
+<div class="featured-collections section-spacing">
+  <div class="page-width">
+    {%- if heading != blank -%}
+      <h2 class="section-heading text-center">{{ heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="featured-collections__grid grid grid--{{ collections_per_row }}-col">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign collection = collections[block.settings.collection]
+            assign custom_title = block.settings.title
+          -%}
+          
+          <div class="featured-collections__item" {{ block.shopify_attributes }}>
+            {%- if collection != blank -%}
+              <a href="{{ collection.url }}" class="featured-collection-card">
+                {%- if collection.image != blank -%}
+                  <div class="featured-collection-card__image">
+                    <img
+                      srcset="
+                        {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
+                        {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
+                        {{ collection.image | image_url }} {{ collection.image.width }}w
+                      "
+                      src="{{ collection.image | image_url: width: 535 }}"
+                      sizes="(min-width: 990px) {{ 990 | divided_by: collections_per_row }}px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
+                      alt="{{ collection.image.alt | escape }}"
+                      loading="lazy"
+                      width="{{ collection.image.width }}"
+                      height="{{ collection.image.height }}"
+                    >
+                  </div>
+                {%- elsif collection.products.first and collection.products.first.featured_image -%}
+                  <div class="featured-collection-card__image">
+                    <img
+                      srcset="
+                        {%- if collection.products.first.featured_image.width >= 165 -%}{{ collection.products.first.featured_image | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if collection.products.first.featured_image.width >= 360 -%}{{ collection.products.first.featured_image | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if collection.products.first.featured_image.width >= 535 -%}{{ collection.products.first.featured_image | image_url: width: 535 }} 535w,{%- endif -%}
+                        {{ collection.products.first.featured_image | image_url }} {{ collection.products.first.featured_image.width }}w
+                      "
+                      src="{{ collection.products.first.featured_image | image_url: width: 535 }}"
+                      sizes="(min-width: 990px) {{ 990 | divided_by: collections_per_row }}px, (min-width: 750px) calc((100vw - 10rem) / 2), calc(100vw - 3rem)"
+                      alt="{{ collection.products.first.featured_image.alt | escape }}"
+                      loading="lazy"
+                      width="{{ collection.products.first.featured_image.width }}"
+                      height="{{ collection.products.first.featured_image.height }}"
+                    >
+                  </div>
+                {%- endif -%}
+                
+                <div class="featured-collection-card__content">
+                  <h3 class="featured-collection-card__title">
+                    {%- if custom_title != blank -%}
+                      {{ custom_title | escape }}
+                    {%- else -%}
+                      {{ collection.title | escape }}
+                    {%- endif -%}
+                  </h3>
+                  {%- if collection.products_count > 0 -%}
+                    <p class="featured-collection-card__count">{{ collection.products_count }} {{ 'sections.featured_collections.products' | t }}</p>
+                  {%- endif -%}
+                </div>
+              </a>
+            {%- else -%}
+              <div class="featured-collection-card featured-collection-card--placeholder">
+                <div class="featured-collection-card__image placeholder-svg">
+                  {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg__image' }}
+                </div>
+                <div class="featured-collection-card__content">
+                  <h3 class="featured-collection-card__title">
+                    {%- if custom_title != blank -%}
+                      {{ custom_title | escape }}
+                    {%- else -%}
+                      {{ 'sections.featured_collections.placeholder_title' | t }}
+                    {%- endif -%}
+                  </h3>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collections",
+  "tag": "section",
+  "class": "section-featured-collections",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "range",
+      "id": "collections_per_row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Collections per row",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom title",
+          "info": "Leave blank to use collection title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

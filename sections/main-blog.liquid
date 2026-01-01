@@ -1,0 +1,142 @@
+{%- paginate blog.articles by 12 -%}
+  <div class="main-blog section-spacing">
+    <div class="page-width">
+      <header class="main-blog__header">
+        <h1 class="main-blog__title h1">{{ blog.title }}</h1>
+      </header>
+
+      {%- if blog.articles.size > 0 -%}
+        <div class="main-blog__grid grid grid--3-col grid--2-col-tablet-down">
+          {%- for article in blog.articles -%}
+            <article class="main-blog__item">
+              <a href="{{ article.url }}" class="blog-card">
+                {%- if article.image -%}
+                  <div class="blog-card__image">
+                    <img
+                      srcset="
+                        {%- if article.image.width >= 165 -%}{{ article.image | image_url: width: 165 }} 165w,{%- endif -%}
+                        {%- if article.image.width >= 360 -%}{{ article.image | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if article.image.width >= 535 -%}{{ article.image | image_url: width: 535 }} 535w,{%- endif -%}
+                        {{ article.image | image_url }} {{ article.image.width }}w
+                      "
+                      src="{{ article.image | image_url: width: 535 }}"
+                      sizes="(min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc(100vw - 35px)"
+                      alt="{{ article.image.alt | escape }}"
+                      loading="lazy"
+                      width="{{ article.image.width }}"
+                      height="{{ article.image.height }}"
+                    >
+                  </div>
+                {%- endif -%}
+                <div class="blog-card__content">
+                  <time class="blog-card__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                    {{ article.published_at | date: '%B %d, %Y' }}
+                  </time>
+                  <h3 class="blog-card__title">{{ article.title }}</h3>
+                  {%- if article.excerpt != blank -%}
+                    <p class="blog-card__excerpt">{{ article.excerpt | strip_html | truncate: 150 }}</p>
+                  {%- endif -%}
+                  <span class="blog-card__link">Read more</span>
+                </div>
+              </a>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="main-blog__pagination">
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="main-blog__empty">
+          <p>No articles found.</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+<style>
+  .main-blog__header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .blog-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: var(--transition);
+    height: 100%;
+  }
+  
+  .blog-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .blog-card__image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 66.67%;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+  }
+  
+  .blog-card__image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+  }
+  
+  .blog-card:hover .blog-card__image img {
+    transform: scale(1.05);
+  }
+  
+  .blog-card__date {
+    display: block;
+    font-size: 1.4rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .blog-card__title {
+    font-family: var(--font-heading-family);
+    font-size: 2rem;
+    margin: 0 0 10px;
+    line-height: 1.3;
+  }
+  
+  .blog-card__excerpt {
+    font-size: 1.5rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  .blog-card__link {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  
+  .main-blog__empty {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.8rem;
+    color: #666;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "section",
+  "class": "section-blog"
+}
+{% endschema %}

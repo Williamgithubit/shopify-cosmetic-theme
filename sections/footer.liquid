@@ -1,0 +1,198 @@
+{% liquid
+  assign footer_menu = section.settings.footer_menu
+%}
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__content page-width">
+    <div class="footer__grid">
+      <div class="footer__block footer__block--info">
+        {%- if settings.logo != blank -%}
+          <img
+            src="{{ settings.logo | image_url: width: 150 }}"
+            alt="{{ shop.name }}"
+            width="150"
+            height="auto"
+            loading="lazy"
+            class="footer__logo"
+          >
+        {%- else -%}
+          <h3 class="footer__heading">{{ shop.name }}</h3>
+        {%- endif -%}
+        
+        {%- if section.settings.footer_text != blank -%}
+          <div class="footer__text">
+            {{ section.settings.footer_text }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_social -%}
+          <ul class="footer__social list-unstyled" role="list">
+            {%- if settings.social_facebook_link != blank -%}
+              <li>
+                <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+                  {% render 'icon-facebook' %}
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_instagram_link != blank -%}
+              <li>
+                <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+                  {% render 'icon-instagram' %}
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_twitter_link != blank -%}
+              <li>
+                <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="Twitter">
+                  {% render 'icon-twitter' %}
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_pinterest_link != blank -%}
+              <li>
+                <a href="{{ settings.social_pinterest_link }}" target="_blank" rel="noopener" aria-label="Pinterest">
+                  {% render 'icon-pinterest' %}
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <li>
+                <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
+                  {% render 'icon-youtube' %}
+                </a>
+              </li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- if footer_menu.links.size > 0 -%}
+        <div class="footer__block footer__block--menu">
+          <h3 class="footer__heading">{{ section.settings.footer_menu_heading }}</h3>
+          <ul class="footer__menu list-unstyled" role="list">
+            {%- for link in footer_menu.links -%}
+              <li>
+                <a href="{{ link.url }}" class="footer__menu-link">
+                  {{ link.title }}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_contact -%}
+        <div class="footer__block footer__block--contact">
+          <h3 class="footer__heading">{{ section.settings.contact_heading }}</h3>
+          <ul class="footer__contact list-unstyled" role="list">
+            {%- if section.settings.contact_email != blank -%}
+              <li>
+                <a href="mailto:{{ section.settings.contact_email }}">
+                  {{ section.settings.contact_email }}
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if section.settings.contact_phone != blank -%}
+              <li>
+                <a href="tel:{{ section.settings.contact_phone }}">
+                  {{ section.settings.contact_phone }}
+                </a>
+              </li>
+            {%- endif -%}
+            {%- if section.settings.contact_address != blank -%}
+              <li>
+                {{ section.settings.contact_address }}
+              </li>
+            {%- endif -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <div class="footer__bottom-content page-width">
+      <div class="footer__copyright">
+        <small>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'sections.footer.all_rights_reserved' | t }}</small>
+      </div>
+      
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <div class="footer__payment">
+          <span class="visually-hidden">{{ 'sections.footer.payment_methods' | t }}</span>
+          <ul class="footer__payment-icons list-unstyled" role="list">
+            {%- for type in shop.enabled_payment_types -%}
+              <li class="footer__payment-icon">
+                {{ type | payment_type_svg_tag: class: 'icon' }}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "footer_text",
+      "label": "Footer text",
+      "default": "<p>Your trusted source for premium beauty and skincare products.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "label": "Show social media icons",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Footer menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "footer_menu_heading",
+      "label": "Menu heading",
+      "default": "Quick Links"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contact",
+      "label": "Show contact information",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Contact heading",
+      "default": "Contact Us"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone"
+    },
+    {
+      "type": "textarea",
+      "id": "contact_address",
+      "label": "Address"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,225 @@
+{% liquid
+  assign products_per_page = section.settings.products_per_page
+  assign columns_desktop = section.settings.columns_desktop
+  assign columns_mobile = section.settings.columns_mobile
+  assign enable_filtering = section.settings.enable_filtering
+  assign enable_sorting = section.settings.enable_sorting
+%}
+
+<div class="collection-grid section-spacing">
+  <div class="page-width">
+    {%- if enable_filtering or enable_sorting -%}
+      <div class="collection-grid__filters">
+        <div class="collection-grid__filters-wrapper">
+          {%- if enable_filtering -%}
+            <button class="collection-grid__filter-toggle button button--secondary" aria-expanded="false" aria-controls="filter-drawer">
+              {% render 'icon-filter' %}
+              <span>{{ 'collections.filtering.filter_button' | t }}</span>
+            </button>
+          {%- endif -%}
+
+          {%- if enable_sorting -%}
+            <div class="collection-grid__sort">
+              <label for="SortBy" class="collection-grid__sort-label">{{ 'collections.sorting.title' | t }}</label>
+              <select name="sort_by" id="SortBy" class="collection-grid__sort-select" aria-describedby="a11y-refresh-page-message">
+                {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                <option value="manual" {% if sort_by == 'manual' %}selected{% endif %}>{{ 'collections.sorting.featured' | t }}</option>
+                <option value="best-selling" {% if sort_by == 'best-selling' %}selected{% endif %}>{{ 'collections.sorting.best_selling' | t }}</option>
+                <option value="title-ascending" {% if sort_by == 'title-ascending' %}selected{% endif %}>{{ 'collections.sorting.az' | t }}</option>
+                <option value="title-descending" {% if sort_by == 'title-descending' %}selected{% endif %}>{{ 'collections.sorting.za' | t }}</option>
+                <option value="price-ascending" {% if sort_by == 'price-ascending' %}selected{% endif %}>{{ 'collections.sorting.price_ascending' | t }}</option>
+                <option value="price-descending" {% if sort_by == 'price-descending' %}selected{% endif %}>{{ 'collections.sorting.price_descending' | t }}</option>
+                <option value="created-ascending" {% if sort_by == 'created-ascending' %}selected{% endif %}>{{ 'collections.sorting.date_ascending' | t }}</option>
+                <option value="created-descending" {% if sort_by == 'created-descending' %}selected{% endif %}>{{ 'collections.sorting.date_descending' | t }}</option>
+              </select>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="collection-grid__active-filters">
+          {%- for filter in collection.filters -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                <a href="{{ filter.url_to_remove }}" class="active-filter">
+                  <span>{{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }}</span>
+                  {% render 'icon-close' %}
+                </a>
+              {%- endif -%}
+            {%- else -%}
+              {%- for filter_value in filter.active_values -%}
+                <a href="{{ filter_value.url_to_remove }}" class="active-filter">
+                  <span>{{ filter_value.label }}</span>
+                  {% render 'icon-close' %}
+                </a>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if collection.filters != empty -%}
+            <a href="{{ collection.url }}" class="active-filter active-filter--clear">
+              {{ 'collections.filtering.clear_all' | t }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if enable_filtering -%}
+        <div class="collection-grid__filter-drawer" id="filter-drawer" aria-hidden="true">
+          <div class="filter-drawer__overlay"></div>
+          <div class="filter-drawer__content">
+            <div class="filter-drawer__header">
+              <h2 class="filter-drawer__title">{{ 'collections.filtering.filter_button' | t }}</h2>
+              <button class="filter-drawer__close" aria-label="{{ 'accessibility.close' | t }}">
+                {% render 'icon-close' %}
+              </button>
+            </div>
+            <form class="filter-drawer__form">
+              {%- for filter in collection.filters -%}
+                <details class="filter-group" {% if forloop.first %}open{% endif %}>
+                  <summary class="filter-group__summary">
+                    <span>{{ filter.label }}</span>
+                    <span class="filter-group__icon">{% render 'icon-caret' %}</span>
+                  </summary>
+                  <div class="filter-group__content">
+                    {%- case filter.type -%}
+                      {%- when 'price_range' -%}
+                        <div class="filter-price-range">
+                          <div class="filter-price-range__inputs">
+                            <div class="filter-price-range__field">
+                              <label for="Filter-{{ filter.label }}-GTE">{{ 'collections.filtering.from' | t }}</label>
+                              <input
+                                type="number"
+                                name="{{ filter.min_value.param_name }}"
+                                id="Filter-{{ filter.label }}-GTE"
+                                {%- if filter.min_value.value -%}
+                                  value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                                {%- endif -%}
+                                placeholder="0"
+                                min="0"
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              >
+                            </div>
+                            <div class="filter-price-range__field">
+                              <label for="Filter-{{ filter.label }}-LTE">{{ 'collections.filtering.to' | t }}</label>
+                              <input
+                                type="number"
+                                name="{{ filter.max_value.param_name }}"
+                                id="Filter-{{ filter.label }}-LTE"
+                                {%- if filter.max_value.value -%}
+                                  value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                                {%- endif -%}
+                                placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                                min="0"
+                                max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      {%- else -%}
+                        <ul class="filter-group__list" role="list">
+                          {%- for value in filter.values -%}
+                            <li class="filter-group__item">
+                              <label class="filter-group__label">
+                                <input
+                                  type="checkbox"
+                                  name="{{ value.param_name }}"
+                                  value="{{ value.value }}"
+                                  {% if value.active %}checked{% endif %}
+                                  {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                                >
+                                <span>{{ value.label }} ({{ value.count }})</span>
+                              </label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                    {%- endcase -%}
+                  </div>
+                </details>
+              {%- endfor -%}
+              <div class="filter-drawer__actions">
+                <button type="submit" class="button button--primary">{{ 'collections.filtering.apply' | t }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <div class="collection-grid__products">
+      {%- if collection.products.size > 0 -%}
+        <div class="collection-grid__grid grid grid--{{ columns_desktop }}-col grid--{{ columns_mobile }}-col-tablet-down">
+          {%- for product in collection.products -%}
+            <div class="collection-grid__item">
+              {% render 'product-card', product: product %}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="collection-grid__pagination">
+            {% render 'pagination', paginate: paginate %}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="collection-grid__empty">
+          <p>{{ 'collections.general.no_matches' | t }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Grid",
+  "tag": "section",
+  "class": "section-collection-grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "label": "Products per page",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Number of columns on desktop",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "Number of columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

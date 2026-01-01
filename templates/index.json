@@ -1,0 +1,128 @@
+
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "image": "shopify://shop_images/generate-a-image-to-use-for-my-collection.png",
+        "image_height": "medium",
+        "heading": "Discover Your Natural Beauty",
+        "subheading": "Premium skincare and cosmetics crafted with care",
+        "button_label": "Shop Now",
+        "button_link": "/collections/all",
+        "text_alignment": "center",
+        "overlay_opacity": 40
+      }
+    },
+    "featured_collections": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection_1": {
+          "type": "collection",
+          "settings": {
+            "collection": "cosmetic-collection",
+            "title": "Skincare"
+          }
+        },
+        "collection_2": {
+          "type": "collection",
+          "settings": {
+            "collection": "cosmetic-collection",
+            "title": "Makeup"
+          }
+        },
+        "collection_3": {
+          "type": "collection",
+          "settings": {
+            "collection": "cosmetic-collection",
+            "title": "Beauty Tools"
+          }
+        }
+      },
+      "block_order": [
+        "collection_1",
+        "collection_2",
+        "collection_3"
+      ],
+      "settings": {
+        "heading": "Shop by Category",
+        "collections_per_row": 3
+      }
+    },
+    "featured_products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Best Sellers",
+        "collection": "cosmetic-collection",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "show_view_all": true
+      }
+    },
+    "image_with_text": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/generate-a-image-to-be-use-in-the-story-section-for-this-project.png",
+        "image_position": "left",
+        "heading": "Our Story",
+        "text": "<p>We believe in the power of natural ingredients and sustainable beauty. Every product is carefully formulated to enhance your natural radiance while caring for your skin.</p>",
+        "button_label": "Learn More",
+        "button_link": "/pages/about"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "This skincare line has completely transformed my skin. I've never felt more confident!",
+            "author": "Sarah M.",
+            "rating": 5
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally found products that work for my sensitive skin. Highly recommend!",
+            "author": "Emily R.",
+            "rating": 5
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Love the natural ingredients and the results are amazing. Will definitely repurchase!",
+            "author": "Jessica L.",
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3"
+      ],
+      "settings": {
+        "heading": "What Our Customers Say"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Join Our Beauty Community",
+        "subheading": "Subscribe to get special offers, beauty tips, and exclusive updates.",
+        "show_name_field": false
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_collections",
+    "featured_products",
+    "image_with_text",
+    "testimonials",
+    "newsletter"
+  ]
+}

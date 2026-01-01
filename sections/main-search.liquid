@@ -1,0 +1,158 @@
+{%- paginate search.results by 24 -%}
+  <div class="main-search section-spacing">
+    <div class="page-width">
+      <header class="main-search__header">
+        <h1 class="main-search__title h1">Search</h1>
+        
+        <form action="{{ routes.search_url }}" method="get" role="search" class="main-search__form">
+          <div class="main-search__input-wrapper">
+            <input
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="Search our store"
+              class="main-search__input"
+              aria-label="Search"
+            >
+            <button type="submit" class="button button--primary main-search__button">
+              Search
+            </button>
+          </div>
+        </form>
+      </header>
+
+      {%- if search.performed -%}
+        {%- if search.results_count > 0 -%}
+          <p class="main-search__results-count">{{ search.results_count }} results found for "{{ search.terms }}"</p>
+          
+          <div class="main-search__results grid grid--4-col grid--2-col-tablet-down">
+            {%- for item in search.results -%}
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  <div class="main-search__item">
+                    {% render 'product-card', product: item %}
+                  </div>
+                {%- when 'article' -%}
+                  <div class="main-search__item">
+                    <a href="{{ item.url }}" class="search-result-card">
+                      {%- if item.image -%}
+                        <img src="{{ item.image | image_url: width: 400 }}" alt="{{ item.title }}" loading="lazy">
+                      {%- endif -%}
+                      <h3>{{ item.title }}</h3>
+                      <p>{{ item.excerpt_or_content | strip_html | truncate: 150 }}</p>
+                    </a>
+                  </div>
+                {%- when 'page' -%}
+                  <div class="main-search__item">
+                    <a href="{{ item.url }}" class="search-result-card">
+                      <h3>{{ item.title }}</h3>
+                      <p>{{ item.content | strip_html | truncate: 150 }}</p>
+                    </a>
+                  </div>
+              {%- endcase -%}
+            {%- endfor -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            <div class="main-search__pagination">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="main-search__empty">
+            <p>No results found for "{{ search.terms }}"</p>
+            <p>Try searching with different keywords.</p>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+{%- endpaginate -%}
+
+<style>
+  .main-search__header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  
+  .main-search__form {
+    max-width: 600px;
+    margin: 30px auto 0;
+  }
+  
+  .main-search__input-wrapper {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .main-search__input {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 1.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-family: var(--font-body-family);
+  }
+  
+  .main-search__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  
+  .main-search__results-count {
+    margin-bottom: 30px;
+    font-size: 1.6rem;
+    color: #666;
+  }
+  
+  .main-search__empty {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .main-search__empty p {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #666;
+  }
+  
+  .search-result-card {
+    display: block;
+    padding: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: var(--transition);
+  }
+  
+  .search-result-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+  
+  .search-result-card img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+  }
+  
+  .search-result-card h3 {
+    margin-bottom: 10px;
+  }
+  
+  .search-result-card p {
+    font-size: 1.4rem;
+    color: #666;
+    line-height: 1.6;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Search",
+  "tag": "section",
+  "class": "section-search"
+}
+{% endschema %}

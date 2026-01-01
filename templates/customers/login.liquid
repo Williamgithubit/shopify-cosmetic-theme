@@ -1,0 +1,171 @@
+<div class="customer-login section-spacing">
+  <div class="page-width">
+    <div class="customer-login__wrapper" style="max-width: 500px; margin: 0 auto;">
+      <h1 class="customer-login__title h2">{{ 'customer.login.title' | t }}</h1>
+
+      {%- form 'customer_login', novalidate: 'novalidate' -%}
+        {%- if form.errors -%}
+          <div class="form__message form__message--error" role="alert">
+            <h2 class="form__message-title h3">
+              {{ 'templates.contact.form.error_heading' | t }}
+            </h2>
+            <ul>
+              {%- for field in form.errors -%}
+                <li>
+                  {%- if field == 'form' -%}
+                    {{ form.errors.messages[field] }}
+                  {%- else -%}
+                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        <div class="field">
+          <label for="CustomerEmail">{{ 'customer.login.email' | t }}</label>
+          <input
+            type="email"
+            name="customer[email]"
+            id="CustomerEmail"
+            autocomplete="email"
+            autocapitalize="off"
+            {% if form.errors contains 'email' %}
+              aria-invalid="true"
+              aria-describedby="CustomerEmail-error"
+            {% endif %}
+            required
+          >
+          {%- if form.errors contains 'email' -%}
+            <small id="CustomerEmail-error" class="form__message">
+              {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+            </small>
+          {%- endif -%}
+        </div>
+
+        <div class="field">
+          <label for="CustomerPassword">{{ 'customer.login.password' | t }}</label>
+          <input
+            type="password"
+            name="customer[password]"
+            id="CustomerPassword"
+            autocomplete="current-password"
+            {% if form.errors contains 'password' %}
+              aria-invalid="true"
+              aria-describedby="CustomerPassword-error"
+            {% endif %}
+            required
+          >
+          {%- if form.errors contains 'password' -%}
+            <small id="CustomerPassword-error" class="form__message">
+              {{ form.errors.translated_fields['password'] | capitalize }} {{ form.errors.messages['password'] }}
+            </small>
+          {%- endif -%}
+        </div>
+
+        <div class="customer-login__actions">
+          <button type="submit" class="button button--primary button--full-width">
+            {{ 'customer.login.sign_in' | t }}
+          </button>
+        </div>
+
+        <a href="{{ routes.account_recover_url }}" class="customer-login__recover">
+          {{ 'customer.login.forgot_password' | t }}
+        </a>
+      {%- endform -%}
+
+      <div class="customer-login__create">
+        <p>{{ 'customer.login.new_customer' | t }}</p>
+        <a href="{{ routes.account_register_url }}" class="button button--secondary">
+          {{ 'customer.register.title' | t }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .field {
+    margin-bottom: 20px;
+  }
+  
+  .field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: 1.6rem;
+    font-family: var(--font-body-family);
+  }
+  
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+  
+  .field input[aria-invalid="true"] {
+    border-color: #d32f2f;
+  }
+  
+  .customer-login__actions {
+    margin: 30px 0 20px;
+  }
+  
+  .customer-login__recover {
+    display: block;
+    text-align: center;
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-bottom: 30px;
+  }
+  
+  .customer-login__recover:hover {
+    text-decoration: underline;
+  }
+  
+  .customer-login__create {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .customer-login__create p {
+    margin-bottom: 15px;
+  }
+  
+  .form__message--error {
+    padding: 15px;
+    background-color: #ffebee;
+    color: #d32f2f;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+  }
+  
+  .form__message-title {
+    font-size: 1.6rem;
+    margin: 0 0 10px;
+  }
+  
+  .form__message--error ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  
+  .form__message {
+    display: block;
+    margin-top: 5px;
+    font-size: 1.4rem;
+    color: #d32f2f;
+  }
+</style>

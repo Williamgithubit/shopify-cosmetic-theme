@@ -1,0 +1,19 @@
+<div class="main-404 section-spacing">
+  <div class="page-width">
+    <div class="main-404__content" style="text-align: center; max-width: 600px; margin: 0 auto;">
+      <h1 class="main-404__title h1">{{ 'general.404.title' | t }}</h1>
+      <p class="main-404__text">{{ 'general.404.subtext' | t }}</p>
+      <a href="{{ routes.root_url }}" class="button button--primary" style="margin-top: 30px;">
+        {{ 'general.continue_shopping' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "tag": "section",
+  "class": "section-404"
+}
+{% endschema %}

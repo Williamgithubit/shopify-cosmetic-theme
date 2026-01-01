@@ -1,0 +1,105 @@
+{% liquid
+  assign heading = section.settings.heading
+%}
+
+<div class="testimonials section-spacing">
+  <div class="page-width">
+    {%- if heading != blank -%}
+      <h2 class="section-heading text-center">{{ heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="testimonials__grid grid grid--3-col">
+        {%- for block in section.blocks -%}
+          <div class="testimonials__item" {{ block.shopify_attributes }}>
+            <div class="testimonial-card">
+              {%- if block.settings.rating > 0 -%}
+                <div class="testimonial-card__rating">
+                  {%- for i in (1..5) -%}
+                    {%- if i <= block.settings.rating -%}
+                      <span class="star star--filled">{% render 'icon-star' %}</span>
+                    {%- else -%}
+                      <span class="star">{% render 'icon-star' %}</span>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              
+              {%- if block.settings.quote != blank -%}
+                <blockquote class="testimonial-card__quote">
+                  <p>{{ block.settings.quote | escape }}</p>
+                </blockquote>
+              {%- endif -%}
+              
+              {%- if block.settings.author != blank -%}
+                <cite class="testimonial-card__author">{{ block.settings.author | escape }}</cite>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section-testimonials",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What Our Customers Say"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "This product has changed my life!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author name",
+          "default": "Customer Name"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating",
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
