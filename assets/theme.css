@@ -793,7 +793,7 @@ h3, .h3 {
 
 @media screen and (max-width: 749px) {
   .footer__content {
-    padding: 50px 0 30px;
+    padding: 50px 20px 30px;
   }
   
   .footer__grid {
@@ -808,6 +808,7 @@ h3, .h3 {
   .footer__bottom-content {
     flex-direction: column;
     text-align: center;
+    padding: 0 20px;
   }
   
   .footer__payment-icons {
