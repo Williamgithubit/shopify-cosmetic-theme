@@ -30,6 +30,17 @@
         "id": "favicon",
         "label": "Favicon image",
         "info": "Will be scaled down to 32x32px"
+      },
+      {
+        "type": "range",
+        "id": "footer_logo_width",
+        "min": 80,
+        "max": 250,
+        "step": 10,
+        "unit": "px",
+        "label": "Footer logo width",
+        "default": 150,
+        "info": "Controls logo size in footer only"
       }
     ]
   },

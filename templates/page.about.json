@@ -1,0 +1,45 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "main-about",
+      "settings": {
+        "show_story": true,
+        "story_image": "shopify://shop_images/generate-a-decent-image-for-the-about-page.png",
+        "story_heading": "Our Story",
+        "story_text": "<p>Founded with a passion for natural beauty, Aura Cosmetics has been crafting premium skincare and cosmetics for over a decade. Our journey began with a simple belief: beauty should be both effective and sustainable.</p><p>Every product we create is a testament to our commitment to quality, using only the finest natural ingredients sourced responsibly from around the world.</p>",
+        "show_values": true,
+        "values_heading": "Our Values",
+        "value_1_title": "Natural Ingredients",
+        "value_1_text": "We use only the finest natural and organic ingredients in all our products.",
+        "value_1_icon": "leaf",
+        "value_2_title": "Cruelty-Free",
+        "value_2_text": "All our products are 100% cruelty-free and never tested on animals.",
+        "value_2_icon": "heart",
+        "value_3_title": "Sustainable",
+        "value_3_text": "We're committed to sustainable practices and eco-friendly packaging.",
+        "value_3_icon": "shield",
+        "value_4_title": "Quality First",
+        "value_4_text": "Every product undergoes rigorous testing to ensure the highest quality standards.",
+        "value_4_icon": "award",
+        "show_mission": true,
+        "mission_heading": "Our Mission",
+        "mission_text": "<p>To empower everyone to embrace their natural beauty through innovative, sustainable, and effective cosmetic solutions. We believe that beauty should be accessible, ethical, and kind to both people and the planet.</p>",
+        "mission_button_label": "Shop Our Products",
+        "mission_button_link": "/collections/all",
+        "show_stats": true,
+        "stat_1_number": "10+",
+        "stat_1_label": "Years Experience",
+        "stat_2_number": "50K+",
+        "stat_2_label": "Happy Customers",
+        "stat_3_number": "100%",
+        "stat_3_label": "Natural Products",
+        "stat_4_number": "200+",
+        "stat_4_label": "Products"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

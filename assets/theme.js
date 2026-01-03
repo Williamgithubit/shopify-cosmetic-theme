@@ -130,7 +130,7 @@
         window.location.reload();
       })
       .catch(function(error) {
-        window.location.reload();
+        console.error('Error:', error);
       });
     }
   }
@@ -223,10 +223,12 @@
     })
     .then(function(data) {
       if (data.status && data.status === 422) {
+        console.error('Cart Error:', data);
         alert(data.message || data.description || window.cartStrings.error);
         return;
       }
       if (data.message || data.description) {
+        console.error('Cart Error:', data);
         alert(data.message || data.description);
         return;
       }
@@ -236,6 +238,7 @@
       }, 300);
     })
     .catch(function(error) {
+      console.error('Error:', error);
       alert(error.message || window.cartStrings.error || 'There was an error updating your cart. Please try again.');
     });
   }
@@ -456,6 +459,10 @@
     images.forEach(function(img) {
       img.src = img.src;
     });
+  } else {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+    document.body.appendChild(script);
   }
 })();
 

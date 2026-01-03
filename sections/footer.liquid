@@ -7,16 +7,21 @@
     <div class="footer__grid">
       <div class="footer__block footer__block--info">
         {%- if settings.logo != blank -%}
-          <img
-            src="{{ settings.logo | image_url: width: 150 }}"
-            alt="{{ shop.name }}"
-            width="150"
-            height="auto"
-            loading="lazy"
-            class="footer__logo"
-          >
+          <a href="{{ routes.root_url }}" class="footer__logo-link">
+            <img
+              src="{{ settings.logo | image_url: width: settings.footer_logo_width }}"
+              alt="{{ shop.name }}"
+              width="{{ settings.footer_logo_width }}"
+              height="auto"
+              loading="lazy"
+              class="footer__logo"
+              style="max-width: {{ settings.footer_logo_width }}px;"
+            >
+          </a>
         {%- else -%}
-          <h3 class="footer__heading">{{ shop.name }}</h3>
+          <a href="{{ routes.root_url }}" class="footer__logo-text">
+            <h3 class="footer__heading">{{ shop.name }}</h3>
+          </a>
         {%- endif -%}
         
         {%- if section.settings.footer_text != blank -%}
@@ -26,43 +31,46 @@
         {%- endif -%}
 
         {%- if section.settings.show_social -%}
-          <ul class="footer__social list-unstyled" role="list">
-            {%- if settings.social_facebook_link != blank -%}
-              <li>
-                <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
-                  {% render 'icon-facebook' %}
-                </a>
-              </li>
-            {%- endif -%}
-            {%- if settings.social_instagram_link != blank -%}
-              <li>
-                <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
-                  {% render 'icon-instagram' %}
-                </a>
-              </li>
-            {%- endif -%}
-            {%- if settings.social_twitter_link != blank -%}
-              <li>
-                <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="Twitter">
-                  {% render 'icon-twitter' %}
-                </a>
-              </li>
-            {%- endif -%}
-            {%- if settings.social_pinterest_link != blank -%}
-              <li>
-                <a href="{{ settings.social_pinterest_link }}" target="_blank" rel="noopener" aria-label="Pinterest">
-                  {% render 'icon-pinterest' %}
-                </a>
-              </li>
-            {%- endif -%}
-            {%- if settings.social_youtube_link != blank -%}
-              <li>
-                <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
-                  {% render 'icon-youtube' %}
-                </a>
-              </li>
-            {%- endif -%}
-          </ul>
+          <div class="footer__social-wrapper">
+            <p class="footer__social-heading">{{ section.settings.social_heading }}</p>
+            <ul class="footer__social list-unstyled" role="list">
+              {%- if settings.social_facebook_link != blank -%}
+                <li>
+                  <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">
+                    {% render 'icon-facebook' %}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_instagram_link != blank -%}
+                <li>
+                  <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">
+                    {% render 'icon-instagram' %}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_twitter_link != blank -%}
+                <li>
+                  <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="Twitter">
+                    {% render 'icon-twitter' %}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_pinterest_link != blank -%}
+                <li>
+                  <a href="{{ settings.social_pinterest_link }}" target="_blank" rel="noopener" aria-label="Pinterest">
+                    {% render 'icon-pinterest' %}
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_youtube_link != blank -%}
+                <li>
+                  <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">
+                    {% render 'icon-youtube' %}
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
         {%- endif -%}
       </div>
 
@@ -86,25 +94,64 @@
           <h3 class="footer__heading">{{ section.settings.contact_heading }}</h3>
           <ul class="footer__contact list-unstyled" role="list">
             {%- if section.settings.contact_email != blank -%}
-              <li>
+              <li class="footer__contact-item">
+                <svg class="footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
                 <a href="mailto:{{ section.settings.contact_email }}">
                   {{ section.settings.contact_email }}
                 </a>
               </li>
             {%- endif -%}
             {%- if section.settings.contact_phone != blank -%}
-              <li>
+              <li class="footer__contact-item">
+                <svg class="footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
                 <a href="tel:{{ section.settings.contact_phone }}">
                   {{ section.settings.contact_phone }}
                 </a>
               </li>
             {%- endif -%}
             {%- if section.settings.contact_address != blank -%}
-              <li>
-                {{ section.settings.contact_address }}
+              <li class="footer__contact-item">
+                <svg class="footer__contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>{{ section.settings.contact_address }}</span>
               </li>
             {%- endif -%}
           </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_newsletter -%}
+        <div class="footer__block footer__block--newsletter">
+          <h3 class="footer__heading">{{ section.settings.newsletter_heading }}</h3>
+          {%- if section.settings.newsletter_text != blank -%}
+            <p class="footer__newsletter-text">{{ section.settings.newsletter_text }}</p>
+          {%- endif -%}
+          {%- form 'customer', class: 'footer__newsletter-form' -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="footer__newsletter-input-wrapper">
+              <input
+                type="email"
+                name="contact[email]"
+                class="footer__newsletter-input"
+                placeholder="{{ section.settings.newsletter_placeholder }}"
+                aria-label="Email address"
+                required
+              >
+              <button type="submit" class="footer__newsletter-button" aria-label="Subscribe">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          {%- endform -%}
         </div>
       {%- endif -%}
     </div>
@@ -147,6 +194,12 @@
       "id": "show_social",
       "label": "Show social media icons",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "social_heading",
+      "label": "Social media heading",
+      "default": "Follow Us"
     },
     {
       "type": "link_list",
@@ -192,6 +245,30 @@
       "id": "show_payment_icons",
       "label": "Show payment icons",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Stay Updated"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "label": "Newsletter text",
+      "default": "Subscribe to get special offers and beauty tips."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Newsletter input placeholder",
+      "default": "Enter your email"
     }
   ]
 }
