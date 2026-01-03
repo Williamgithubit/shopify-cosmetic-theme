@@ -7,21 +7,25 @@
     <meta name="theme-color" content="{{ settings.color_primary }}">
 
     {%- if settings.favicon != blank -%}
-      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
 
-    <title>{{ 'gift_cards.issued.title' | t: value: gift_card.balance | money_without_trailing_zeros, shop: shop.name }}</title>
+    <title>{{ shop.name }} - {{ 'gift_cards.issued.title' | t }}</title>
     <meta name="description" content="{{ 'gift_cards.issued.subtext' | t }}">
 
     {{ content_for_header }}
 
     {% style %}
       {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ settings.type_header_font | font_face: font_display: 'swap' }}
-
-      :root {
-        --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
-        --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+      {{ settings.type_header_font | font_face: font_display: 'swap' }}:root
+      {
+        --font-body-family: {{ settings.type_body_font.family }}, 
+        {{ settings.type_body_font.fallback_families }};
+        --font-heading-family: {{ settings.type_header_font.family }}, 
+        {{ settings.type_header_font.fallback_families }};
         --color-primary: {{ settings.color_primary }};
         --color-background: {{ settings.color_background }};
         --color-text: {{ settings.color_text }};
@@ -111,7 +115,11 @@
     <div class="gift-card-wrapper">
       <header class="gift-card-header">
         {%- if shop.logo -%}
-          <img src="{{ shop.logo | image_url: width: 200 }}" alt="{{ shop.name }}" width="200" height="auto">
+          <img
+            src="{{ shop.logo | image_url: width: 200 }}"
+            alt="{{ shop.name }}"
+            width="200"
+            height="auto">
         {%- else -%}
           <h2>{{ shop.name }}</h2>
         {%- endif -%}
@@ -135,12 +143,19 @@
 
       {%- if gift_card.pass_url -%}
         <div class="gift-card-qr">
-          <img src="{{ gift_card.qr_identifier | qr_code_url }}" alt="{{ 'gift_cards.issued.qr_code_text' | t }}" width="200" height="200">
+          <img
+            src="{{ gift_card.qr_identifier | qr_code_url }}"
+            alt="{{ 'gift_cards.issued.qr_code_text' | t }}"
+            width="200"
+            height="200">
         </div>
       {%- endif -%}
 
       <div class="gift-card-actions">
-        <a href="{{ shop.url }}" class="button" target="_blank">{{ 'gift_cards.issued.shop_link' | t }}</a>
+        <a
+          href="{{ shop.url }}"
+          class="button"
+          target="_blank">{{ 'gift_cards.issued.shop_link' | t }}</a>
         <button class="button" onclick="window.print();">{{ 'gift_cards.issued.print_gift_card' | t }}</button>
       </div>
 
