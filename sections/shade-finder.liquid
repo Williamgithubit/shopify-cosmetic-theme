@@ -1,0 +1,549 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+  assign background_color = section.settings.background_color
+%}
+
+<div class="shade-finder section-spacing" style="background-color: {{ background_color }};">
+  <div class="page-width">
+    <div class="shade-finder__header text-center">
+      {%- if heading != blank -%}
+        <h2 class="shade-finder__heading h2">{{ heading | escape }}</h2>
+      {%- endif -%}
+      {%- if subheading != blank -%}
+        <p class="shade-finder__subheading">{{ subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="shade-finder__container">
+      <div class="shade-finder__quiz" id="shadeFinder">
+        <div class="shade-finder__step active" data-step="1">
+          <h3 class="shade-finder__question">What's your skin tone?</h3>
+          <div class="shade-finder__options">
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="fair"
+              aria-label="Fair skin tone">
+              <div class="shade-finder__swatch" style="background-color: #F5D6C6;"></div>
+              <span>Fair</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="light"
+              aria-label="Light skin tone">
+              <div class="shade-finder__swatch" style="background-color: #E8B89A;"></div>
+              <span>Light</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="medium"
+              aria-label="Medium skin tone">
+              <div class="shade-finder__swatch" style="background-color: #C68E6E;"></div>
+              <span>Medium</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="tan"
+              aria-label="Tan skin tone">
+              <div class="shade-finder__swatch" style="background-color: #A67152;"></div>
+              <span>Tan</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="deep"
+              aria-label="Deep skin tone">
+              <div class="shade-finder__swatch" style="background-color: #6B4423;"></div>
+              <span>Deep</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="shade-finder__step" data-step="2">
+          <h3 class="shade-finder__question">What's your undertone?</h3>
+          <div class="shade-finder__options">
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="cool"
+              aria-label="Cool undertone">
+              <div class="shade-finder__icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="#B8C5D6" />
+                </svg>
+              </div>
+              <span>Cool</span>
+              <small>Pink or blue undertones</small>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="warm"
+              aria-label="Warm undertone">
+              <div class="shade-finder__icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="#E8B89A" />
+                </svg>
+              </div>
+              <span>Warm</span>
+              <small>Golden or peachy undertones</small>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option"
+              data-value="neutral"
+              aria-label="Neutral undertone">
+              <div class="shade-finder__icon">
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2">
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="#D4A574" />
+                </svg>
+              </div>
+              <span>Neutral</span>
+              <small>Balanced undertones</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="shade-finder__step" data-step="3">
+          <h3 class="shade-finder__question">What's your main concern?</h3>
+          <div class="shade-finder__options shade-finder__options--grid">
+            <button
+              type="button"
+              class="shade-finder__option shade-finder__option--small"
+              data-value="coverage"
+              aria-label="Coverage concern">
+              <span>Coverage</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option shade-finder__option--small"
+              data-value="hydration"
+              aria-label="Hydration concern">
+              <span>Hydration</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option shade-finder__option--small"
+              data-value="longevity"
+              aria-label="Long-lasting concern">
+              <span>Long-lasting</span>
+            </button>
+            <button
+              type="button"
+              class="shade-finder__option shade-finder__option--small"
+              data-value="natural"
+              aria-label="Natural finish concern">
+              <span>Natural Finish</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="shade-finder__results" style="display: none;">
+          <div class="shade-finder__results-header">
+            <svg
+              class="shade-finder__success-icon"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22 4 12 14.01 9 11.01" />
+            </svg>
+            <h3 class="shade-finder__results-title">Your Perfect Matches</h3>
+            <p class="shade-finder__results-subtitle">Based on your preferences, we recommend:</p>
+          </div>
+          <div class="shade-finder__results-products" id="shadeFinderResults"></div>
+          <div class="shade-finder__results-actions">
+            <button
+              type="button"
+              class="button button--primary"
+              onclick="window.location.href='/collections/all'">
+              Shop All Products
+            </button>
+            <button type="button" class="button button--secondary shade-finder__restart">
+              Retake Quiz
+            </button>
+          </div>
+        </div>
+
+        <div class="shade-finder__navigation">
+          <button
+            type="button"
+            class="shade-finder__nav-button shade-finder__prev"
+            disabled
+            aria-label="Previous question">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Previous
+          </button>
+          <div class="shade-finder__progress">
+            <div class="shade-finder__progress-bar">
+              <div class="shade-finder__progress-fill" style="width: 33.33%;"></div>
+            </div>
+            <span class="shade-finder__progress-text">Step
+              <span id="currentStep">1</span>
+              of 3</span>
+          </div>
+          <button
+            type="button"
+            class="shade-finder__nav-button shade-finder__next"
+            disabled
+            aria-label="Next question">
+            Next
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .shade-finder {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shade-finder__header {
+    margin-bottom: var(--spacing-3xl, 64px);
+  }
+
+  .shade-finder__heading {
+    margin-bottom: var(--spacing-md, 16px);
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .shade-finder__subheading {
+    font-size: 1.8rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .shade-finder__container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius-xl, 16px);
+    padding: var(--spacing-3xl, 64px) var(--spacing-2xl, 48px);
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  }
+
+  .shade-finder__step {
+    display: none;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .shade-finder__step.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .shade-finder__question {
+    font-size: 2.4rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: var(--spacing-2xl, 48px);
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .shade-finder__options {
+    display: flex;
+    gap: var(--spacing-lg, 24px);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .shade-finder__options--grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--spacing-md, 16px);
+  }
+
+  .shade-finder__option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm, 8px);
+    padding: var(--spacing-lg, 24px);
+    background: #fafafa;
+    border: 2px solid transparent;
+    border-radius: var(--radius-lg, 12px);
+    cursor: pointer;
+    transition: all var(--transition-base, 0.25s);
+    min-width: 120px;
+  }
+
+  .shade-finder__option--small {
+    min-width: auto;
+    padding: var(--spacing-md, 16px);
+  }
+
+  .shade-finder__option:hover {
+    border-color: var(--color-primary, #d4a574);
+    background: white;
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  }
+
+  .shade-finder__option.selected {
+    border-color: var(--color-primary, #d4a574);
+    background: rgba(212, 165, 116, 0.1);
+  }
+
+  .shade-finder__swatch {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .shade-finder__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .shade-finder__option span {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .shade-finder__option small {
+    font-size: 1.2rem;
+    color: #666;
+    text-align: center;
+  }
+
+  .shade-finder__navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--spacing-3xl, 64px);
+    padding-top: var(--spacing-xl, 32px);
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .shade-finder__nav-button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 8px);
+    padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+    background: var(--color-primary, #d4a574);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md, 8px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s);
+  }
+
+  .shade-finder__nav-button:hover:not(:disabled) {
+    background: var(--color-secondary, #c89563);
+    transform: translateY(-2px);
+  }
+
+  .shade-finder__nav-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .shade-finder__progress {
+    flex: 1;
+    max-width: 300px;
+    margin: 0 var(--spacing-lg, 24px);
+  }
+
+  .shade-finder__progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e5e5;
+    border-radius: var(--radius-full, 9999px);
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm, 8px);
+  }
+
+  .shade-finder__progress-fill {
+    height: 100%;
+    background: var(--color-primary, #d4a574);
+    transition: width 0.3s ease;
+  }
+
+  .shade-finder__progress-text {
+    font-size: 1.3rem;
+    color: #666;
+    text-align: center;
+    display: block;
+  }
+
+  .shade-finder__results {
+    text-align: center;
+  }
+
+  .shade-finder__results-header {
+    margin-bottom: var(--spacing-2xl, 48px);
+  }
+
+  .shade-finder__success-icon {
+    color: #4caf50;
+    margin: 0 auto var(--spacing-lg, 24px);
+  }
+
+  .shade-finder__results-title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm, 8px);
+  }
+
+  .shade-finder__results-subtitle {
+    font-size: 1.6rem;
+    color: #666;
+  }
+
+  .shade-finder__results-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg, 24px);
+    margin-bottom: var(--spacing-2xl, 48px);
+  }
+
+  .shade-finder__results-actions {
+    display: flex;
+    gap: var(--spacing-md, 16px);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media screen and (max-width: 749px) {
+    .shade-finder__container {
+      padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
+    }
+
+    .shade-finder__navigation {
+      flex-direction: column;
+      gap: var(--spacing-md, 16px);
+    }
+
+    .shade-finder__progress {
+      order: -1;
+      max-width: 100%;
+      margin: 0 0 var(--spacing-md, 16px);
+    }
+
+    .shade-finder__nav-button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .shade-finder__options {
+      gap: var(--spacing-md, 16px);
+    }
+
+    .shade-finder__option {
+      min-width: 100px;
+      padding: var(--spacing-md, 16px);
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Shade Finder Quiz",
+    "tag": "section",
+    "class": "section-shade-finder",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Find Your Perfect Shade"
+      }, {
+        "type": "text",
+        "id": "subheading",
+        "label": "Subheading",
+        "default": "Answer a few quick questions to discover products perfectly matched to your skin"
+      }, {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color",
+        "default": "#F5EDE6"
+      }, {
+        "type": "collection",
+        "id": "recommendations_collection",
+        "label": "Products collection",
+        "info": "Products to recommend based on quiz results"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Shade Finder Quiz"
+      }
+    ]
+  }
+{% endschema %}

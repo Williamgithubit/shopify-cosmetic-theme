@@ -1,3 +1,4 @@
+
 {
   "current": {
     "color_primary": "#d4a574",
@@ -17,7 +18,7 @@
     "social_youtube_link": "",
     "currency_code_enabled": false,
     "cart_type": "page",
-    "cart_notes_enable": false,
+    "cart_notes_enable": true,
     "product_show_vendor": false,
     "product_show_sku": false,
     "product_image_size": "medium",

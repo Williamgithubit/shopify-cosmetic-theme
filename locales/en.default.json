@@ -1,3 +1,4 @@
+
 {
   "general": {
     "accessibility": {
@@ -26,6 +27,9 @@
       "share_on_facebook": "Share on Facebook",
       "share_on_twitter": "Share on Twitter",
       "share_on_pinterest": "Share on Pinterest"
+    },
+    "breadcrumbs": {
+      "home": "Home"
     },
     "continue_shopping": "Continue shopping"
   },
@@ -76,6 +80,7 @@
   "products": {
     "product": {
       "add_to_cart": "Add to Cart",
+      "quick_add": "Quick Add",
       "sold_out": "Sold Out",
       "unavailable": "Unavailable",
       "on_sale": "Sale",
@@ -93,7 +98,12 @@
   },
   "collections": {
     "general": {
-      "no_matches": "Sorry, there are no products in this collection"
+      "no_matches": "Sorry, there are no products in this collection",
+      "items": "products",
+      "items_with_count": {
+        "one": "{{ count }} product",
+        "other": "{{ count }} products"
+      }
     },
     "sorting": {
       "title": "Sort by",

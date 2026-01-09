@@ -1,17 +1,33 @@
 {% liquid
   assign image = section.settings.image
+  assign video_url = section.settings.video_url
   assign image_height = section.settings.image_height
   assign heading = section.settings.heading
   assign subheading = section.settings.subheading
+  assign badge_text = section.settings.badge_text
   assign button_label = section.settings.button_label
   assign button_link = section.settings.button_link
+  assign button_label_2 = section.settings.button_label_2
+  assign button_link_2 = section.settings.button_link_2
   assign text_alignment = section.settings.text_alignment
   assign overlay_opacity = section.settings.overlay_opacity
 %}
 
-<div class="hero hero--{{ image_height }}{% if image == blank %} hero--no-image{% endif %}">
-  {%- if image != blank -%}
-    <div class="hero__media">
+<div class="hero-enhanced hero-enhanced--{{ image_height }}{% if image == blank and video_url == blank %} hero--no-image{% endif %}">
+  {%- if video_url != blank -%}
+    <div class="hero-enhanced__media">
+      <video
+        autoplay
+        muted
+        loop
+        playsinline
+        class="hero-enhanced__video">
+        <source src="{{ video_url }}" type="video/mp4">
+      </video>
+      <div class="hero-enhanced__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }};"></div>
+    </div>
+  {%- elsif image != blank -%}
+    <div class="hero-enhanced__media">
       <img
         srcset="
           {%- if image.width >= 375 -%}{{ image | image_url: width: 375 }} 375w,{%- endif -%}
@@ -30,121 +46,154 @@
         fetchpriority="high"
         width="{{ image.width }}"
         height="{{ image.height }}"
-        alt="{{ image.alt | escape }}"
-        class="hero__image"
-      >
-      <div class="hero__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }};"></div>
+        alt="{{ image.alt | escape }}">
+      <div class="hero-enhanced__overlay" style="opacity: {{ overlay_opacity | divided_by: 100.0 }};"></div>
     </div>
   {%- endif -%}
 
-  <div class="hero__content hero__content--{{ text_alignment }} page-width">
-    <div class="hero__text-wrapper">
+  <div class="hero-enhanced__content hero-enhanced__content--{{ text_alignment }} page-width">
+    <div class="hero-enhanced__text-wrapper">
+      {%- if badge_text != blank -%}
+        <span class="hero-enhanced__badge">{{ badge_text | escape }}</span>
+      {%- endif -%}
+
       {%- if heading != blank -%}
-        <h1 class="hero__heading h1">{{ heading | escape }}</h1>
+        <h1 class="hero-enhanced__heading">{{ heading | escape }}</h1>
       {%- endif -%}
-      
+
       {%- if subheading != blank -%}
-        <p class="hero__subheading">{{ subheading | escape }}</p>
+        <p class="hero-enhanced__subheading">{{ subheading | escape }}</p>
       {%- endif -%}
-      
-      {%- if button_label != blank and button_link != blank -%}
-        <a href="{{ button_link }}" class="button button--primary hero__button">
-          {{ button_label | escape }}
-        </a>
+
+      {%- if button_label != blank or button_label_2 != blank -%}
+        <div class="hero-enhanced__buttons">
+          {%- if button_label != blank and button_link != blank -%}
+            <a href="{{ button_link }}" class="hero-enhanced__button hero-enhanced__button--primary">
+              {{ button_label | escape }}
+            </a>
+          {%- endif -%}
+          {%- if button_label_2 != blank and button_link_2 != blank -%}
+            <a href="{{ button_link_2 }}" class="hero-enhanced__button hero-enhanced__button--secondary">
+              {{ button_label_2 | escape }}
+            </a>
+          {%- endif -%}
+        </div>
       {%- endif -%}
     </div>
   </div>
 </div>
 
 {% schema %}
-{
-  "name": "Hero Banner",
-  "tag": "section",
-  "class": "section-hero",
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
-    },
-    {
-      "type": "select",
-      "id": "image_height",
-      "label": "Image height",
-      "options": [
-        {
-          "value": "small",
-          "label": "Small"
-        },
-        {
-          "value": "medium",
-          "label": "Medium"
-        },
-        {
-          "value": "large",
-          "label": "Large"
-        }
-      ],
-      "default": "medium"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Discover Your Natural Beauty"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subheading",
-      "default": "Premium skincare and cosmetics crafted with care"
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Shop Now"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
-    },
-    {
-      "type": "select",
-      "id": "text_alignment",
-      "label": "Text alignment",
-      "options": [
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ],
-      "default": "center"
-    },
-    {
-      "type": "range",
-      "id": "overlay_opacity",
-      "min": 0,
-      "max": 80,
-      "step": 10,
-      "unit": "%",
-      "label": "Image overlay opacity",
-      "default": 30
-    }
-  ],
-  "presets": [
-    {
-      "name": "Hero Banner"
-    }
-  ]
-}
+  {
+    "name": "Hero Banner",
+    "tag": "section",
+    "class": "section-hero",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Media"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Background image",
+        "info": "Recommended: 1920 x 1080px"
+      },
+      {
+        "type": "text",
+        "id": "video_url",
+        "label": "Video URL",
+        "info": "MP4 format recommended. Video will override image if both are set."
+      },
+      {
+        "type": "select",
+        "id": "image_height",
+        "label": "Section height",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          }, {
+            "value": "medium",
+            "label": "Medium"
+          }, {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "large"
+      }, {
+        "type": "range",
+        "id": "overlay_opacity",
+        "min": 0,
+        "max": 80,
+        "step": 10,
+        "unit": "%",
+        "label": "Overlay opacity",
+        "default": 40,
+        "info": "Darkens media for better text readability"
+      }, {
+        "type": "header",
+        "content": "Content"
+      }, {
+        "type": "text",
+        "id": "badge_text",
+        "label": "Badge text",
+        "info": "Optional badge above heading (e.g., 'New Collection', 'Limited Edition')"
+      }, {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Discover Your Natural Beauty"
+      }, {
+        "type": "textarea",
+        "id": "subheading",
+        "label": "Subheading",
+        "default": "Premium skincare and cosmetics crafted with care for your skin and the planet"
+      }, {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          }, {
+            "value": "center",
+            "label": "Center"
+          }, {
+            "value": "right",
+            "label": "Right"
+          }
+        ],
+        "default": "center"
+      }, {
+        "type": "header",
+        "content": "Buttons"
+      }, {
+        "type": "text",
+        "id": "button_label",
+        "label": "Primary button label",
+        "default": "Shop Now"
+      }, {
+        "type": "url",
+        "id": "button_link",
+        "label": "Primary button link"
+      }, {
+        "type": "text",
+        "id": "button_label_2",
+        "label": "Secondary button label",
+        "info": "Optional second button"
+      }, {
+        "type": "url",
+        "id": "button_link_2",
+        "label": "Secondary button link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Hero Banner"
+      }
+    ]
+  }
 {% endschema %}

@@ -4,9 +4,12 @@
   else
     assign placeholder = false
   endif
+
+  assign show_vendor = settings.product_show_vendor | default: false
+  assign show_quick_add = section.settings.enable_quick_add | default: true
 %}
 
-<div class="product-card">
+<div class="product-card" data-product-id="{{ product.id }}">
   <a href="{{ product.url | default: '#' }}" class="product-card__link">
     <div class="product-card__media">
       {%- if placeholder -%}
@@ -30,9 +33,8 @@
           class="product-card__image"
           loading="lazy"
           width="{{ product.featured_media.width }}"
-          height="{{ product.featured_media.height }}"
-        >
-        
+          height="{{ product.featured_media.height }}">
+
         {%- if product.media[1] != nil -%}
           <img
             srcset="
@@ -50,8 +52,7 @@
             class="product-card__image product-card__image--hover"
             loading="lazy"
             width="{{ product.media[1].width }}"
-            height="{{ product.media[1].height }}"
-          >
+            height="{{ product.media[1].height }}">
         {%- endif -%}
       {%- endif -%}
 
@@ -66,9 +67,29 @@
           </div>
         {%- endif -%}
       {%- endunless -%}
+
+      {%- unless placeholder -%}
+        {%- if show_quick_add and product.available -%}
+          <div class="product-card__quick-add">
+            <button
+              type="button"
+              class="product-card__quick-add-button"
+              data-product-id="{{ product.id }}"
+              data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+              aria-label="{{ 'products.product.quick_add' | t: product_title: product.title }}">
+              <span class="product-card__quick-add-spinner"></span>
+              <span class="product-card__quick-add-text">{{ 'products.product.quick_add' | t }}</span>
+            </button>
+          </div>
+        {%- endif -%}
+      {%- endunless -%}
     </div>
 
     <div class="product-card__info">
+      {%- if show_vendor and product.vendor != blank -%}
+        <div class="product-card__vendor">{{ product.vendor | escape }}</div>
+      {%- endif -%}
+
       <h3 class="product-card__title">
         {%- if placeholder -%}
           {{ 'onboarding.product_title' | t }}
@@ -81,7 +102,9 @@
         {%- if placeholder -%}
           <span class="price">{{ 1999 | money }}</span>
         {%- else -%}
-          {% render 'price', product: product, use_variant: false %}
+          {% render 'price'
+            , product: product
+            , use_variant: false %}
         {%- endif -%}
       </div>
     </div>

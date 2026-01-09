@@ -1,0 +1,258 @@
+{% liquid
+  assign products_per_page = section.settings.products_per_page
+  assign columns_desktop = section.settings.columns_desktop
+  assign columns_mobile = section.settings.columns_mobile
+  assign enable_quick_view = section.settings.enable_quick_view
+  assign enable_infinite_scroll = section.settings.enable_infinite_scroll
+  assign grid_style = section.settings.grid_style
+%}
+
+{% paginate collection.products by products_per_page %}
+  <div
+    class="collection-product-grid"
+    data-collection-grid
+    data-infinite-scroll="{{ enable_infinite_scroll }}">
+    <div class="page-width">
+      {%- if collection.products.size > 0 -%}
+        <div class="collection-product-grid__grid collection-product-grid__grid--{{ grid_style }} grid grid--{{ columns_desktop }}-col grid--{{ columns_mobile }}-col-tablet-down" data-products-grid>
+          {%- for product in collection.products -%}
+            <div class="collection-product-grid__item" data-product-item>
+              {% render 'product-card-premium'
+                , 
+ product: product
+                , 
+ enable_quick_view: enable_quick_view
+                ,
+ show_vendor: section.settings.show_vendor
+                ,
+ show_badges: section.settings.show_badges
+                ,
+ show_swatches: section.settings.show_swatches
+                ,
+ image_ratio: section.settings.image_ratio
+              %}
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <div class="collection-product-grid__pagination" data-pagination>
+            {%- if enable_infinite_scroll -%}
+              <div class="collection-product-grid__load-more">
+                {%- if paginate.next -%}
+                  <button
+                    type="button"
+                    class="button button--secondary collection-product-grid__load-more-button"
+                    data-load-more
+                    data-next-url="{{ paginate.next.url }}">
+                    <span class="collection-product-grid__load-more-text">{{ 'collections.general.load_more' | t }}</span>
+                    <span class="collection-product-grid__load-more-spinner" aria-hidden="true">
+                      <svg
+                        class="spinner"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <circle
+                          cx="10"
+                          cy="10"
+                          r="8"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          fill="none"
+                          opacity="0.25" />
+                        <path
+                          d="M10 2a8 8 0 0 1 8 8"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          fill="none"
+                          stroke-linecap="round" />
+                      </svg>
+                    </span>
+                  </button>
+                {%- endif -%}
+                <div class="collection-product-grid__pagination-info">
+                  {{ 'collections.general.showing_items' | t: current: paginate.current_offset | plus: 1, total: collection.products_count }}
+                </div>
+              </div>
+            {%- else -%}
+              {% render 'pagination'
+                , paginate: paginate %}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="collection-product-grid__empty">
+          <div class="collection-product-grid__empty-content">
+            <h2 class="collection-product-grid__empty-title">{{ 'collections.general.no_matches' | t }}</h2>
+            <p class="collection-product-grid__empty-text">{{ 'collections.general.no_matches_description' | t }}</p>
+            <a href="{{ collection.url }}" class="button button--primary">
+              {{ 'collections.filtering.clear_all' | t }}
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{% endpaginate %}
+
+{%- if enable_quick_view -%}
+  <div
+    class="quick-view-modal"
+    id="quick-view-modal"
+    aria-hidden="true"
+    data-quick-view-modal>
+    <div class="quick-view-modal__overlay" data-quick-view-overlay></div>
+    <div
+      class="quick-view-modal__dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="quick-view-title">
+      <button
+        type="button"
+        class="quick-view-modal__close"
+        aria-label="{{ 'accessibility.close' | t }}"
+        data-quick-view-close>
+        {% render 'icon-close' %}
+      </button>
+      <div class="quick-view-modal__content" data-quick-view-content>
+        <div class="quick-view-modal__loading">
+          <svg
+            class="spinner"
+            width="40"
+            height="40"
+            viewBox="0 0 40 40"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle
+              cx="20"
+              cy="20"
+              r="16"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              opacity="0.25" />
+            <path
+              d="M20 4a16 16 0 0 1 16 16"
+              stroke="currentColor"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="round" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Product Grid",
+    "tag": "section",
+    "class": "section-collection-product-grid",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 8,
+        "max": 48,
+        "step": 4,
+        "label": "Products per page",
+        "default": 24
+      },
+      {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "label": "Number of columns on desktop",
+        "default": 4
+      },
+      {
+        "type": "select",
+        "id": "columns_mobile",
+        "label": "Number of columns on mobile",
+        "options": [
+          {
+            "value": "1",
+            "label": "1 column"
+          }, {
+            "value": "2",
+            "label": "2 columns"
+          }
+        ],
+        "default": "2"
+      }, {
+        "type": "select",
+        "id": "grid_style",
+        "label": "Grid style",
+        "options": [
+          {
+            "value": "standard",
+            "label": "Standard"
+          }, {
+            "value": "masonry",
+            "label": "Masonry (Pinterest-style)"
+          }
+        ],
+        "default": "standard",
+        "info": "Masonry creates a dynamic, staggered layout"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "label": "Product image ratio",
+        "options": [
+          {
+            "value": "portrait",
+            "label": "Portrait (4:5)"
+          }, {
+            "value": "square",
+            "label": "Square (1:1)"
+          }, {
+            "value": "landscape",
+            "label": "Landscape (16:9)"
+          }
+        ],
+        "default": "portrait"
+      }, {
+        "type": "header",
+        "content": "Product Card Features"
+      }, {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show product vendor",
+        "default": false
+      }, {
+        "type": "checkbox",
+        "id": "show_badges",
+        "label": "Show product badges (Sale, Sold Out, etc.)",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_swatches",
+        "label": "Show color swatches on product cards",
+        "default": true,
+        "info": "Displays color variant options on hover"
+      }, {
+        "type": "checkbox",
+        "id": "enable_quick_view",
+        "label": "Enable quick view",
+        "default": true,
+        "info": "Allows customers to preview products in a modal"
+      }, {
+        "type": "header",
+        "content": "Pagination"
+      }, {
+        "type": "checkbox",
+        "id": "enable_infinite_scroll",
+        "label": "Enable infinite scroll",
+        "default": true,
+        "info": "Load more products automatically or with a button"
+      }
+    ]
+  }
+{% endschema %}

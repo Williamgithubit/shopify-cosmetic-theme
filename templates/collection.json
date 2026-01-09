@@ -1,26 +1,48 @@
 
 {
   "sections": {
-    "banner": {
-      "type": "collection-banner",
+    "hero": {
+      "type": "collection-hero",
       "settings": {
+        "hero_height": "medium",
+        "text_alignment": "center",
+        "show_collection_image": true,
+        "overlay_opacity": 30,
+        "show_breadcrumbs": true,
         "show_collection_description": true,
-        "show_collection_image": true
+        "show_product_count": true,
+        "show_promo_bar": true,
+        "promo_text": "Free shipping on orders over $50 • Cruelty-free & Vegan"
+      }
+    },
+    "filters": {
+      "type": "collection-filters",
+      "settings": {
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "filter_layout": "sidebar",
+        "enable_sticky_filters": true
       }
     },
     "product_grid": {
-      "type": "collection-grid",
+      "type": "collection-product-grid",
       "settings": {
-        "products_per_page": 16,
+        "products_per_page": 24,
         "columns_desktop": 4,
         "columns_mobile": "2",
-        "enable_filtering": true,
-        "enable_sorting": true
+        "grid_style": "standard",
+        "image_ratio": "portrait",
+        "show_vendor": false,
+        "show_badges": true,
+        "show_swatches": true,
+        "enable_quick_view": true,
+        "enable_infinite_scroll": true
       }
     }
   },
   "order": [
-    "banner",
+    "hero",
+    "filters",
     "product_grid"
   ]
 }

@@ -1,0 +1,233 @@
+{% liquid
+  if product == blank
+    assign placeholder = true
+  else
+    assign placeholder = false
+  endif
+
+  assign enable_quick_view = enable_quick_view | default: true
+  assign show_vendor = show_vendor | default: false
+  assign show_badges = show_badges | default: true
+  assign show_swatches = show_swatches | default: true
+  assign image_ratio = image_ratio | default: 'portrait'
+%}
+
+<div class="product-card-premium" data-product-id="{{ product.id }}">
+  <div class="product-card-premium__inner">
+    <div class="product-card-premium__media-wrapper product-card-premium__media-wrapper--{{ image_ratio }}">
+      <a
+        href="{{ product.url | default: '#' }}"
+        class="product-card-premium__link"
+        aria-label="{{ product.title | escape }}">
+        <div class="product-card-premium__media">
+          {%- if placeholder -%}
+            <div class="product-card-premium__image placeholder-svg">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg__image' }}
+            </div>
+          {%- elsif product.featured_media -%}
+            <img
+              srcset="
+                {%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if product.featured_media.width >= 940 -%}{{ product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+              "
+              src="{{ product.featured_media | image_url: width: 533 }}"
+              sizes="(min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ product.featured_media.alt | default: product.title | escape }}"
+              class="product-card-premium__image product-card-premium__image--primary"
+              loading="lazy"
+              width="{{ product.featured_media.width }}"
+              height="{{ product.featured_media.height }}">
+
+            {%- if product.media[1] != nil -%}
+              <img
+                srcset="
+                  {%- if product.media[1].width >= 165 -%}{{ product.media[1] | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if product.media[1].width >= 360 -%}{{ product.media[1] | image_url: width: 360 }} 360w,{%- endif -%}
+                  {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
+                  {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
+                  {%- if product.media[1].width >= 940 -%}{{ product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
+                  {{ product.media[1] | image_url }} {{ product.media[1].width }}w
+                "
+                src="{{ product.media[1] | image_url: width: 533 }}"
+                sizes="(min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                alt="{{ product.media[1].alt | default: product.title | escape }}"
+                class="product-card-premium__image product-card-premium__image--secondary"
+                loading="lazy"
+                width="{{ product.media[1].width }}"
+                height="{{ product.media[1].height }}">
+            {%- endif -%}
+          {%- endif -%}
+
+          <div class="product-card-premium__overlay"></div>
+        </div>
+      </a>
+
+      {%- unless placeholder -%}
+        {%- if show_badges -%}
+          <div class="product-card-premium__badges">
+            {%- if product.available == false -%}
+              <span class="product-card-premium__badge product-card-premium__badge--sold-out">
+                {{ 'products.product.sold_out' | t }}
+              </span>
+            {%- elsif product.compare_at_price > product.price -%}
+              {%- assign discount_percentage = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+              <span class="product-card-premium__badge product-card-premium__badge--sale">
+                -{{ discount_percentage }}%
+              </span>
+            {%- endif -%}
+
+            {%- if product.metafields.custom.badge != blank -%}
+              <span class="product-card-premium__badge product-card-premium__badge--custom">
+                {{ product.metafields.custom.badge }}
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="product-card-premium__actions">
+          {%- if product.available -%}
+            <button
+              type="button"
+              class="product-card-premium__wishlist"
+              aria-label="{{ 'products.product.add_to_wishlist' | t }}"
+              data-wishlist-toggle
+              data-product-id="{{ product.id }}">
+              {% render 'icon-heart' %}
+            </button>
+          {%- endif -%}
+
+          {%- if enable_quick_view and product.available -%}
+            <button
+              type="button"
+              class="product-card-premium__quick-view"
+              aria-label="{{ 'products.product.quick_view' | t }}"
+              data-quick-view-trigger
+              data-product-handle="{{ product.handle }}">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M10 4C5 4 1.73 7.11 1 10c.73 2.89 4 6 9 6s8.27-3.11 9-6c-.73-2.89-4-6-9-6z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="2.5"
+                  stroke="currentColor"
+                  stroke-width="1.5" />
+              </svg>
+              <span class="visually-hidden">{{ 'products.product.quick_view' | t }}</span>
+            </button>
+          {%- endif -%}
+        </div>
+      {%- endunless -%}
+    </div>
+
+    <div class="product-card-premium__info">
+      {%- if show_vendor and product.vendor != blank -%}
+        <div class="product-card-premium__vendor">{{ product.vendor | escape }}</div>
+      {%- endif -%}
+
+      <h3 class="product-card-premium__title">
+        <a href="{{ product.url | default: '#' }}" class="product-card-premium__title-link">
+          {%- if placeholder -%}
+            {{ 'onboarding.product_title' | t }}
+          {%- else -%}
+            {{ product.title | escape }}
+          {%- endif -%}
+        </a>
+      </h3>
+
+      {%- unless placeholder -%}
+        {%- if show_swatches and product.options_with_values.size > 0 -%}
+          {%- for option in product.options_with_values -%}
+            {%- liquid
+              assign is_color_option = false
+              assign option_name_downcase = option.name | downcase
+              if option_name_downcase contains 'color' or option_name_downcase contains 'colour'
+                assign is_color_option = true
+              endif
+            -%}
+
+            {%- if is_color_option and option.values.size > 1 -%}
+              <div class="product-card-premium__swatches" data-product-swatches>
+                {%- for value in option.values limit: 5 -%}
+                  {%- assign swatch_color = value | handleize -%}
+                  <a
+                    href="{{ product.url }}?variant={{ product.variants[forloop.index0].id }}"
+                    class="product-card-premium__swatch"
+                    style="background-color: {{ swatch_color }};"
+                    title="{{ value | escape }}"
+                    data-color="{{ swatch_color }}"
+                    aria-label="{{ value | escape }}">
+                    <span class="visually-hidden">{{ value | escape }}</span>
+                  </a>
+                {%- endfor -%}
+                {%- if option.values.size > 5 -%}
+                  <span class="product-card-premium__swatch-more">+{{ option.values.size | minus: 5 }}</span>
+                {%- endif -%}
+              </div>
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endunless -%}
+
+      <div class="product-card-premium__price">
+        {%- if placeholder -%}
+          <span class="price">{{ 1999 | money }}</span>
+        {%- else -%}
+          {% render 'price'
+            , product: product
+            , use_variant: false %}
+        {%- endif -%}
+      </div>
+
+      {%- unless placeholder -%}
+        {%- if product.available -%}
+          <button
+            type="button"
+            class="product-card-premium__add-to-cart button button--primary"
+            data-quick-add
+            data-product-id="{{ product.id }}"
+            data-variant-id="{{ product.selected_or_first_available_variant.id }}">
+            <span class="product-card-premium__add-to-cart-text">{{ 'products.product.add_to_cart' | t }}</span>
+            <span class="product-card-premium__add-to-cart-spinner" aria-hidden="true">
+              <svg
+                class="spinner"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle
+                  cx="8"
+                  cy="8"
+                  r="6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                  opacity="0.25" />
+                <path
+                  d="M8 2a6 6 0 0 1 6 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                  stroke-linecap="round" />
+              </svg>
+            </span>
+          </button>
+        {%- endif -%}
+      {%- endunless -%}
+    </div>
+  </div>
+</div>

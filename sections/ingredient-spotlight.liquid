@@ -1,0 +1,550 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+%}
+
+<div class="ingredient-spotlight section-spacing">
+  <div class="page-width">
+    <div class="ingredient-spotlight__header text-center">
+      {%- if heading != blank -%}
+        <h2 class="ingredient-spotlight__heading h2">{{ heading | escape }}</h2>
+      {%- endif -%}
+      {%- if subheading != blank -%}
+        <p class="ingredient-spotlight__subheading">{{ subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="ingredient-spotlight__carousel" id="ingredientCarousel">
+        <div class="ingredient-spotlight__track">
+          {%- for block in section.blocks -%}
+            <div class="ingredient-spotlight__slide" {{ block.shopify_attributes }}>
+              <div class="ingredient-spotlight__card">
+                {%- if block.settings.image != blank -%}
+                  <div class="ingredient-spotlight__image-wrapper">
+                    <img
+                      srcset="
+                        {%- if block.settings.image.width >= 300 -%}{{ block.settings.image | image_url: width: 300 }} 300w,{%- endif -%}
+                        {%- if block.settings.image.width >= 500 -%}{{ block.settings.image | image_url: width: 500 }} 500w,{%- endif -%}
+                        {%- if block.settings.image.width >= 700 -%}{{ block.settings.image | image_url: width: 700 }} 700w,{%- endif -%}
+                        {{ block.settings.image | image_url }} {{ block.settings.image.width }}w
+                      "
+                      src="{{ block.settings.image | image_url: width: 500 }}"
+                      alt="{{ block.settings.image.alt | default: block.settings.name | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                      class="ingredient-spotlight__image">
+                    <div class="ingredient-spotlight__overlay"></div>
+                  </div>
+                {%- else -%}
+                  <div class="ingredient-spotlight__image-wrapper ingredient-spotlight__image-wrapper--placeholder">
+                    {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {%- endif -%}
+
+                <div class="ingredient-spotlight__content">
+                  {%- if block.settings.badge != blank -%}
+                    <span class="ingredient-spotlight__badge">{{ block.settings.badge | escape }}</span>
+                  {%- endif -%}
+
+                  {%- if block.settings.name != blank -%}
+                    <h3 class="ingredient-spotlight__name">{{ block.settings.name | escape }}</h3>
+                  {%- endif -%}
+
+                  {%- if block.settings.latin_name != blank -%}
+                    <p class="ingredient-spotlight__latin">{{ block.settings.latin_name | escape }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.description != blank -%}
+                    <p class="ingredient-spotlight__description">{{ block.settings.description | escape }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.benefits != blank -%}
+                    <div class="ingredient-spotlight__benefits">
+                      <h4 class="ingredient-spotlight__benefits-title">Key Benefits:</h4>
+                      <ul class="ingredient-spotlight__benefits-list">
+                        {%- assign benefits = block.settings.benefits | split: ',' -%}
+                        {%- for benefit in benefits limit: 3 -%}
+                          <li>
+                            <svg
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2">
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            {{ benefit | strip | escape }}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+
+                  {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                    <a href="{{ block.settings.link_url }}" class="ingredient-spotlight__link">
+                      {{ block.settings.link_text | escape }}
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2">
+                        <line
+                          x1="5"
+                          y1="12"
+                          x2="19"
+                          y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </a>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if section.blocks.size > 1 -%}
+          <div class="ingredient-spotlight__controls">
+            <button
+              type="button"
+              class="ingredient-spotlight__arrow ingredient-spotlight__arrow--prev"
+              aria-label="Previous ingredient">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <div
+              class="ingredient-spotlight__dots"
+              role="tablist"
+              aria-label="Ingredient slides"></div>
+            <button
+              type="button"
+              class="ingredient-spotlight__arrow ingredient-spotlight__arrow--next"
+              aria-label="Next ingredient">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="ingredient-spotlight__empty">
+        <p>Add ingredient blocks to showcase your key ingredients</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .ingredient-spotlight {
+    position: relative;
+    background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+  }
+
+  .ingredient-spotlight__header {
+    margin-bottom: var(--spacing-3xl, 64px);
+  }
+
+  .ingredient-spotlight__heading {
+    margin-bottom: var(--spacing-md, 16px);
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .ingredient-spotlight__subheading {
+    font-size: 1.8rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .ingredient-spotlight__carousel {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .ingredient-spotlight__track {
+    display: flex;
+    overflow: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .ingredient-spotlight__slide {
+    min-width: 100%;
+    padding: 0 var(--spacing-md, 16px);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.5s ease
+    , transform 0.5s ease;
+  }
+
+  .ingredient-spotlight__slide.active {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ingredient-spotlight__card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3xl, 64px);
+    background: white;
+    border-radius: var(--radius-xl, 16px);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+    align-items: center;
+  }
+
+  .ingredient-spotlight__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 120%;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  .ingredient-spotlight__image-wrapper--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ingredient-spotlight__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .ingredient-spotlight__card:hover .ingredient-spotlight__image {
+    transform: scale(1.05);
+  }
+
+  .ingredient-spotlight__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%);
+    pointer-events: none;
+  }
+
+  .ingredient-spotlight__content {
+    padding: var(--spacing-2xl, 48px);
+  }
+
+  .ingredient-spotlight__badge {
+    display: inline-block;
+    padding: var(--spacing-xs, 4px) var(--spacing-md, 16px);
+    background: rgba(212, 165, 116, 0.15);
+    color: var(--color-primary, #d4a574);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-full, 9999px);
+    margin-bottom: var(--spacing-md, 16px);
+  }
+
+  .ingredient-spotlight__name {
+    font-size: 3.2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs, 4px);
+    color: var(--color-text, #2c2c2c);
+    line-height: 1.2;
+  }
+
+  .ingredient-spotlight__latin {
+    font-size: 1.4rem;
+    font-style: italic;
+    color: #999;
+    margin-bottom: var(--spacing-lg, 24px);
+  }
+
+  .ingredient-spotlight__description {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: var(--spacing-xl, 32px);
+  }
+
+  .ingredient-spotlight__benefits {
+    margin-bottom: var(--spacing-xl, 32px);
+  }
+
+  .ingredient-spotlight__benefits-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text, #2c2c2c);
+    margin-bottom: var(--spacing-md, 16px);
+  }
+
+  .ingredient-spotlight__benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm, 8px);
+  }
+
+  .ingredient-spotlight__benefits-list li {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 8px);
+    font-size: 1.5rem;
+    color: #666;
+  }
+
+  .ingredient-spotlight__benefits-list svg {
+    color: #4caf50;
+    flex-shrink: 0;
+  }
+
+  .ingredient-spotlight__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm, 8px);
+    padding: var(--spacing-md, 16px) var(--spacing-xl, 32px);
+    background: var(--color-primary, #d4a574);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md, 8px);
+    font-weight: 600;
+    font-size: 1.5rem;
+    transition: all var(--transition-base, 0.25s);
+  }
+
+  .ingredient-spotlight__link:hover {
+    background: var(--color-secondary, #c89563);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  }
+
+  .ingredient-spotlight__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg, 24px);
+    margin-top: var(--spacing-2xl, 48px);
+  }
+
+  .ingredient-spotlight__arrow {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #e5e5e5;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s);
+  }
+
+  .ingredient-spotlight__arrow:hover {
+    border-color: var(--color-primary, #d4a574);
+    background: var(--color-primary, #d4a574);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .ingredient-spotlight__arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .ingredient-spotlight__dots {
+    display: flex;
+    gap: var(--spacing-sm, 8px);
+  }
+
+  .ingredient-spotlight__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #e5e5e5;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s);
+    padding: 0;
+  }
+
+  .ingredient-spotlight__dot.active {
+    background: var(--color-primary, #d4a574);
+    width: 32px;
+    border-radius: var(--radius-full, 9999px);
+  }
+
+  .ingredient-spotlight__empty {
+    text-align: center;
+    padding: var(--spacing-4xl, 96px) var(--spacing-xl, 32px);
+    color: #999;
+    font-size: 1.6rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ingredient-spotlight__card {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .ingredient-spotlight__image-wrapper {
+      padding-bottom: 80%;
+    }
+
+    .ingredient-spotlight__content {
+      padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
+    }
+
+    .ingredient-spotlight__name {
+      font-size: 2.4rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ingredient-spotlight__controls {
+      gap: var(--spacing-md, 16px);
+    }
+
+    .ingredient-spotlight__arrow {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Ingredient Spotlight",
+    "tag": "section",
+    "class": "section-ingredient-spotlight",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Powerful Natural Ingredients"
+      }, {
+        "type": "textarea",
+        "id": "subheading",
+        "label": "Subheading",
+        "default": "Discover the science-backed botanicals that make our products extraordinary"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "ingredient",
+        "name": "Ingredient",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Ingredient image",
+            "info": "Recommended: 700 x 840px"
+          },
+          {
+            "type": "text",
+            "id": "badge",
+            "label": "Badge text",
+            "default": "Organic",
+            "info": "Optional badge (e.g., 'Organic', 'Certified', 'Rare')"
+          },
+          {
+            "type": "text",
+            "id": "name",
+            "label": "Ingredient name",
+            "default": "Hyaluronic Acid"
+          },
+          {
+            "type": "text",
+            "id": "latin_name",
+            "label": "Scientific name",
+            "default": "Sodium Hyaluronate",
+            "info": "Optional Latin/scientific name"
+          }, {
+            "type": "textarea",
+            "id": "description",
+            "label": "Description",
+            "default": "A powerful humectant that can hold up to 1000x its weight in water, providing intense hydration and plumping effects for smoother, more youthful-looking skin."
+          }, {
+            "type": "text",
+            "id": "benefits",
+            "label": "Key benefits",
+            "default": "Deep hydration, Plumps fine lines, Improves skin texture",
+            "info": "Separate benefits with commas (max 3 will display)"
+          }, {
+            "type": "text",
+            "id": "link_text",
+            "label": "Button text",
+            "default": "Shop Products"
+          }, {
+            "type": "url",
+            "id": "link_url",
+            "label": "Button link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ingredient Spotlight",
+        "blocks": [
+          {
+            "type": "ingredient",
+            "settings": {
+              "badge": "Organic",
+              "name": "Hyaluronic Acid",
+              "latin_name": "Sodium Hyaluronate",
+              "description": "A powerful humectant that can hold up to 1000x its weight in water, providing intense hydration and plumping effects.",
+              "benefits": "Deep hydration, Plumps fine lines, Improves skin texture"
+            }
+          }, {
+            "type": "ingredient",
+            "settings": {
+              "badge": "Natural",
+              "name": "Vitamin C",
+              "latin_name": "Ascorbic Acid",
+              "description": "A potent antioxidant that brightens skin, evens tone, and protects against environmental damage.",
+              "benefits": "Brightens complexion, Reduces dark spots, Boosts collagen"
+            }
+          }, {
+            "type": "ingredient",
+            "settings": {
+              "badge": "Pure",
+              "name": "Rosehip Oil",
+              "latin_name": "Rosa Canina",
+              "description": "Rich in essential fatty acids and vitamins, this luxurious oil nourishes and regenerates skin.",
+              "benefits": "Anti-aging, Fades scars, Deeply nourishing"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

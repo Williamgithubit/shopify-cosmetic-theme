@@ -1,11 +1,144 @@
+
 {
   "sections": {
-    "main": {
-      "type": "main-contact",
-      "settings": {}
+    "contact_hero_QmxRTp": {
+      "type": "contact-hero",
+      "settings": {
+        "heading": "Get in Touch",
+        "subheading": "Questions about shades, routines, or orders? We're here to help you glow.",
+        "background_image": "shopify://shop_images/generate-a-image-for-charlotte-tilbury-pillow-talk-makeup-gift.png",
+        "overlay_opacity": 80,
+        "text_alignment": "center",
+        "show_breadcrumbs": true
+      }
+    },
+    "contact_info_8KpLmN": {
+      "type": "contact-info",
+      "blocks": {
+        "info_card_YzN9Hp": {
+          "type": "info_card",
+          "settings": {
+            "icon": "email",
+            "title": "Email Us",
+            "text": "contact@auracosmetics.com",
+            "link_text": "Send Email",
+            "link_url": "mailto:contact@auracosmetics.com"
+          }
+        },
+        "info_card_Bx7Wqm": {
+          "type": "info_card",
+          "settings": {
+            "icon": "phone",
+            "title": "Call Us",
+            "text": "+1 (555) 123-4567",
+            "link_text": "Call Now",
+            "link_url": "tel:+15551234567"
+          }
+        },
+        "info_card_Fn3Krt": {
+          "type": "info_card",
+          "settings": {
+            "icon": "location",
+            "title": "Visit Us",
+            "text": "123 Beauty Lane\nLos Angeles, CA 90001",
+            "link_text": "Get Directions",
+            "link_url": ""
+          }
+        },
+        "info_card_Dv5Pxw": {
+          "type": "info_card",
+          "settings": {
+            "icon": "clock",
+            "title": "Business Hours",
+            "text": "Mon-Fri: 9AM - 6PM PST\nWeekends: 10AM - 4PM PST",
+            "link_text": "",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "info_card_YzN9Hp",
+        "info_card_Bx7Wqm",
+        "info_card_Fn3Krt",
+        "info_card_Dv5Pxw"
+      ],
+      "settings": {
+        "heading": "Ways to Reach Us",
+        "subheading": "Choose the method that works best for you",
+        "show_social": true,
+        "social_instagram": "",
+        "social_facebook": "",
+        "social_twitter": "",
+        "social_pinterest": ""
+      }
+    },
+    "contact_form_3TnVbK": {
+      "type": "contact-form",
+      "settings": {
+        "heading": "Send Us a Message",
+        "subheading": "Fill out the form below and we'll get back to you as soon as possible",
+        "button_text": "Send Message",
+        "show_phone": true,
+        "show_subject": true,
+        "show_trust_badges": true
+      }
+    },
+    "contact_faq_9LwXmP": {
+      "type": "contact-faq",
+      "blocks": {
+        "faq_Jh8Qnr": {
+          "type": "faq",
+          "settings": {
+            "question": "What are your shipping times?",
+            "answer": "<p>We ship orders within 1-2 business days. Delivery typically takes 3-5 business days for domestic orders and 7-14 days for international orders.</p>"
+          }
+        },
+        "faq_Mk2Vtx": {
+          "type": "faq",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy for unopened products. If you're not satisfied, contact us within 30 days of delivery for a full refund.</p>"
+          }
+        },
+        "faq_Pw6Lzy": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I find my perfect shade?",
+            "answer": "<p>Use our Shade Finder Quiz on the homepage, or contact our beauty experts who can provide personalized recommendations based on your skin tone and undertone.</p>"
+          }
+        },
+        "faq_Rx4Nbv": {
+          "type": "faq",
+          "settings": {
+            "question": "Are your products cruelty-free?",
+            "answer": "<p>Yes! All our products are 100% cruelty-free and vegan. We never test on animals and use only ethically sourced ingredients.</p>"
+          }
+        },
+        "faq_Ty9Wcm": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer wholesale pricing?",
+            "answer": "<p>Yes, we offer wholesale pricing for salons, spas, and retailers. Please contact us at wholesale@auracosmetics.com for more information.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_Jh8Qnr",
+        "faq_Mk2Vtx",
+        "faq_Pw6Lzy",
+        "faq_Rx4Nbv",
+        "faq_Ty9Wcm"
+      ],
+      "settings": {
+        "heading": "Frequently Asked Questions",
+        "subheading": "Find quick answers to common questions"
+      }
     }
   },
   "order": [
-    "main"
+    "contact_hero_QmxRTp",
+    "contact_info_8KpLmN",
+    "contact_form_3TnVbK",
+    "contact_faq_9LwXmP"
   ]
 }

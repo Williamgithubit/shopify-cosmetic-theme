@@ -1,0 +1,516 @@
+{% liquid
+  assign heading = section.settings.heading
+  assign subheading = section.settings.subheading
+%}
+
+<div class="contact-info section-spacing">
+  <div class="page-width">
+    {%- if heading != blank or subheading != blank -%}
+      <div class="contact-info__header text-center">
+        {%- if heading != blank -%}
+          <h2 class="contact-info__heading h2">{{ heading | escape }}</h2>
+        {%- endif -%}
+        {%- if subheading != blank -%}
+          <p class="contact-info__subheading">{{ subheading | escape }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="contact-info__grid">
+        {%- for block in section.blocks -%}
+          <div
+            class="contact-info__card"
+            data-scroll-reveal
+            data-scroll-reveal-delay="{{ forloop.index | times: 100 }}"
+            {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != 'none' -%}
+              <div class="contact-info__icon" aria-hidden="true">
+                {%- case block.settings.icon -%}
+                  {%- when 'email' -%}
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  {%- when 'phone' -%}
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  {%- when 'location' -%}
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle
+                        cx="12"
+                        cy="10"
+                        r="3" />
+                    </svg>
+                  {%- when 'clock' -%}
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                  {%- when 'chat' -%}
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                {%- endcase -%}
+              </div>
+            {%- endif -%}
+
+            <div class="contact-info__content">
+              {%- if block.settings.title != blank -%}
+                <h3 class="contact-info__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.text != blank -%}
+                <div class="contact-info__text">{{ block.settings.text | escape }}</div>
+              {%- endif -%}
+
+              {%- if block.settings.link_text != blank and block.settings.link_url != blank -%}
+                <a
+                  href="{{ block.settings.link_url }}"
+                  class="contact-info__link"
+                  {% if block.settings.link_url contains 'mailto:' or block.settings.link_url contains 'tel:' %}
+                  aria-label="{{ block.settings.link_text | escape }}"
+                  {% endif %}>
+                  {{ block.settings.link_text | escape }}
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true">
+                    <line
+                      x1="5"
+                      y1="12"
+                      x2="19"
+                      y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_social -%}
+      <div
+        class="contact-info__social"
+        data-scroll-reveal
+        data-scroll-reveal-delay="400">
+        <h3 class="contact-info__social-heading">Follow Us</h3>
+        <div class="contact-info__social-links">
+          {%- if section.settings.social_instagram != blank -%}
+            <a
+              href="{{ section.settings.social_instagram }}"
+              class="contact-info__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on Instagram">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_facebook != blank -%}
+            <a
+              href="{{ section.settings.social_facebook }}"
+              class="contact-info__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on Facebook">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_twitter != blank -%}
+            <a
+              href="{{ section.settings.social_twitter }}"
+              class="contact-info__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on Twitter">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+              </svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_pinterest != blank -%}
+            <a
+              href="{{ section.settings.social_pinterest }}"
+              class="contact-info__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on Pinterest">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="currentColor">
+                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" />
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .contact-info {
+    background: #fafafa;
+  }
+
+  .contact-info__header {
+    margin-bottom: var(--spacing-3xl, 64px);
+  }
+
+  .contact-info__heading {
+    margin-bottom: var(--spacing-md, 16px);
+    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .contact-info__subheading {
+    font-size: 1.8rem;
+    color: #666;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .contact-info__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl, 32px);
+    margin-bottom: var(--spacing-3xl, 64px);
+  }
+
+  .contact-info__card {
+    background: white;
+    padding: var(--spacing-2xl, 48px) var(--spacing-xl, 32px);
+    border-radius: var(--radius-xl, 16px);
+    box-shadow: var(--shadow-sm, 0 1px 3px 0 rgba(0, 0, 0, 0.1));
+    transition: all var(--transition-base, 0.25s);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contact-info__card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  }
+
+  .contact-info__icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(200, 149, 99, 0.1) 100%);
+    border-radius: 50%;
+    margin-bottom: var(--spacing-lg, 24px);
+    color: var(--color-primary, #d4a574);
+    transition: all var(--transition-base, 0.25s);
+  }
+
+  .contact-info__card:hover .contact-info__icon {
+    background: linear-gradient(135deg, var(--color-primary, #d4a574) 0%, var(--color-secondary, #c89563) 100%);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .contact-info__content {
+    width: 100%;
+  }
+
+  .contact-info__title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm, 8px);
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .contact-info__text {
+    font-size: 1.5rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md, 16px);
+  }
+
+  .contact-info__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs, 4px);
+    color: var(--color-primary, #d4a574);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.5rem;
+    transition: all var(--transition-fast, 0.15s);
+  }
+
+  .contact-info__link:hover,
+  .contact-info__link:focus {
+    color: var(--color-secondary, #c89563);
+    gap: var(--spacing-sm, 8px);
+  }
+
+  .contact-info__social {
+    text-align: center;
+    padding-top: var(--spacing-2xl, 48px);
+    border-top: 1px solid #e5e5e5;
+  }
+
+  .contact-info__social-heading {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg, 24px);
+    color: var(--color-text, #2c2c2c);
+  }
+
+  .contact-info__social-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md, 16px);
+    flex-wrap: wrap;
+  }
+
+  .contact-info__social-link {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #e5e5e5;
+    border-radius: 50%;
+    color: #666;
+    transition: all var(--transition-base, 0.25s);
+    text-decoration: none;
+  }
+
+  .contact-info__social-link:hover,
+  .contact-info__social-link:focus {
+    background: var(--color-primary, #d4a574);
+    border-color: var(--color-primary, #d4a574);
+    color: white;
+    transform: translateY(-4px);
+  }
+
+  @media screen and (max-width: 749px) {
+    .contact-info__grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg, 24px);
+    }
+
+    .contact-info__card {
+      padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Contact Info",
+    "tag": "section",
+    "class": "section-contact-info",
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading",
+        "default": "Ways to Reach Us"
+      },
+      {
+        "type": "textarea",
+        "id": "subheading",
+        "label": "Subheading",
+        "default": "Choose the method that works best for you"
+      },
+      {
+        "type": "header",
+        "content": "Social Media"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_social",
+        "label": "Show social media links",
+        "default": true
+      }, {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      }, {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      }, {
+        "type": "url",
+        "id": "social_twitter",
+        "label": "Twitter URL"
+      }, {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "info_card",
+        "name": "Info Card",
+        "settings": [
+          {
+            "type": "select",
+            "id": "icon",
+            "label": "Icon",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "email",
+                "label": "Email"
+              },
+              {
+                "value": "phone",
+                "label": "Phone"
+              },
+              {
+                "value": "location",
+                "label": "Location"
+              }, {
+                "value": "clock",
+                "label": "Clock"
+              }, {
+                "value": "chat",
+                "label": "Chat"
+              }
+            ],
+            "default": "email"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Email Us"
+          },
+          {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text",
+            "default": "contact@auracosmetics.com"
+          },
+          {
+            "type": "text",
+            "id": "link_text",
+            "label": "Link text",
+            "default": "Send Email"
+          }, {
+            "type": "url",
+            "id": "link_url",
+            "label": "Link URL",
+            "info": "Use mailto: for email, tel: for phone"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Contact Info",
+        "blocks": [
+          {
+            "type": "info_card",
+            "settings": {
+              "icon": "email",
+              "title": "Email Us",
+              "text": "contact@auracosmetics.com",
+              "link_text": "Send Email",
+              "link_url": "mailto:contact@auracosmetics.com"
+            }
+          }, {
+            "type": "info_card",
+            "settings": {
+              "icon": "phone",
+              "title": "Call Us",
+              "text": "+1 (555) 123-4567",
+              "link_text": "Call Now",
+              "link_url": "tel:+15551234567"
+            }
+          }, {
+            "type": "info_card",
+            "settings": {
+              "icon": "location",
+              "title": "Visit Us",
+              "text": "123 Beauty Lane\nLos Angeles, CA 90001",
+              "link_text": "Get Directions",
+              "link_url": "https://maps.google.com"
+            }
+          }, {
+            "type": "info_card",
+            "settings": {
+              "icon": "clock",
+              "title": "Business Hours",
+              "text": "Mon-Fri: 9AM - 6PM PST\nWeekends: 10AM - 4PM PST",
+              "link_text": "",
+              "link_url": ""
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

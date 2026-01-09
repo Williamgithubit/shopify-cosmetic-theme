@@ -1,0 +1,370 @@
+<div
+  class="quick-view-modal"
+  id="quickViewModal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="quickViewTitle"
+  style="display: none;">
+  <div class="quick-view-modal__overlay"></div>
+  <div class="quick-view-modal__container">
+    <button
+      type="button"
+      class="quick-view-modal__close"
+      aria-label="Close quick view">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+        <line
+          x1="18"
+          y1="6"
+          x2="6"
+          y2="18" />
+        <line
+          x1="6"
+          y1="6"
+          x2="18"
+          y2="18" />
+      </svg>
+    </button>
+
+    <div class="quick-view-modal__content" id="quickViewContent">
+      <div class="quick-view-modal__loading">
+        <div class="loading-spinner"></div>
+        <p>Loading product...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .quick-view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-modal, 1050);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg, 24px);
+  }
+
+  .quick-view-modal.is-open {
+    display: flex;
+  }
+
+  .quick-view-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .quick-view-modal__container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 90vh;
+    background: white;
+    border-radius: var(--radius-xl, 16px);
+    overflow: hidden;
+    animation: slideUp 0.4s ease;
+    box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .quick-view-modal__close {
+    position: absolute;
+    top: var(--spacing-lg, 24px);
+    right: var(--spacing-lg, 24px);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all var(--transition-fast, 0.15s);
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  }
+
+  .quick-view-modal__close:hover {
+    background: var(--color-primary, #d4a574);
+    color: white;
+    transform: rotate(90deg);
+  }
+
+  .quick-view-modal__content {
+    overflow-y: auto;
+    max-height: 90vh;
+    padding: var(--spacing-2xl, 48px);
+  }
+
+  .quick-view-modal__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4xl, 96px);
+    text-align: center;
+  }
+
+  .quick-view-modal__loading p {
+    margin-top: var(--spacing-lg, 24px);
+    color: #666;
+    font-size: 1.6rem;
+  }
+
+  .quick-view-modal__product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3xl, 64px);
+  }
+
+  .quick-view-modal__gallery {
+    position: relative;
+  }
+
+  .quick-view-modal__main-image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 125%;
+    background: #f5f5f5;
+    border-radius: var(--radius-lg, 12px);
+    overflow: hidden;
+    margin-bottom: var(--spacing-md, 16px);
+  }
+
+  .quick-view-modal__main-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .quick-view-modal__thumbnails {
+    display: flex;
+    gap: var(--spacing-sm, 8px);
+    overflow-x: auto;
+  }
+
+  .quick-view-modal__thumbnail {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-md, 8px);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--transition-fast, 0.15s);
+  }
+
+  .quick-view-modal__thumbnail:hover,
+  .quick-view-modal__thumbnail.active {
+    border-color: var(--color-primary, #d4a574);
+  }
+
+  .quick-view-modal__thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .quick-view-modal__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quick-view-modal__vendor {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #999;
+    margin-bottom: var(--spacing-xs, 4px);
+  }
+
+  .quick-view-modal__title {
+    font-size: 2.8rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md, 16px);
+    line-height: 1.3;
+  }
+
+  .quick-view-modal__price {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--color-primary, #d4a574);
+    margin-bottom: var(--spacing-lg, 24px);
+  }
+
+  .quick-view-modal__price--compare {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 2rem;
+    margin-right: var(--spacing-sm, 8px);
+  }
+
+  .quick-view-modal__description {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: var(--spacing-xl, 32px);
+  }
+
+  .quick-view-modal__variants {
+    margin-bottom: var(--spacing-xl, 32px);
+  }
+
+  .quick-view-modal__variant-label {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm, 8px);
+    display: block;
+  }
+
+  .quick-view-modal__variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm, 8px);
+  }
+
+  .quick-view-modal__variant-option {
+    padding: var(--spacing-sm, 8px) var(--spacing-md, 16px);
+    border: 2px solid #e5e5e5;
+    border-radius: var(--radius-md, 8px);
+    background: white;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.15s);
+    font-size: 1.4rem;
+  }
+
+  .quick-view-modal__variant-option:hover {
+    border-color: var(--color-primary, #d4a574);
+  }
+
+  .quick-view-modal__variant-option.selected {
+    border-color: var(--color-primary, #d4a574);
+    background: rgba(212, 165, 116, 0.1);
+  }
+
+  .quick-view-modal__variant-option:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .quick-view-modal__actions {
+    display: flex;
+    gap: var(--spacing-md, 16px);
+    margin-top: auto;
+    padding-top: var(--spacing-xl, 32px);
+  }
+
+  .quick-view-modal__add-to-cart {
+    flex: 1;
+    padding: var(--spacing-lg, 24px);
+    background: var(--color-primary, #d4a574);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md, 8px);
+    font-weight: 600;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: all var(--transition-base, 0.25s);
+  }
+
+  .quick-view-modal__add-to-cart:hover:not(:disabled) {
+    background: var(--color-secondary, #c89563);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  }
+
+  .quick-view-modal__add-to-cart:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .quick-view-modal__view-full {
+    padding: var(--spacing-lg, 24px);
+    background: transparent;
+    color: var(--color-text, #2c2c2c);
+    border: 2px solid var(--color-text, #2c2c2c);
+    border-radius: var(--radius-md, 8px);
+    font-weight: 600;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: all var(--transition-base, 0.25s);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .quick-view-modal__view-full:hover {
+    background: var(--color-text, #2c2c2c);
+    color: white;
+  }
+
+  @media screen and (max-width: 989px) {
+    .quick-view-modal__product {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-xl, 32px);
+    }
+
+    .quick-view-modal__content {
+      padding: var(--spacing-xl, 32px) var(--spacing-lg, 24px);
+    }
+
+    .quick-view-modal__actions {
+      flex-direction: column;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .quick-view-modal {
+      padding: 0;
+    }
+
+    .quick-view-modal__container {
+      max-height: 100vh;
+      border-radius: 0;
+    }
+
+    .quick-view-modal__content {
+      max-height: 100vh;
+    }
+  }
+</style>
