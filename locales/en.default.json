@@ -103,7 +103,8 @@
       "items_with_count": {
         "one": "{{ count }} product",
         "other": "{{ count }} products"
-      }
+      },
+      "showing_items": "Showing {{ current }} - {{ total }} products"
     },
     "sorting": {
       "title": "Sort by",

@@ -1,0 +1,113 @@
+{% liquid
+  if product == blank
+    assign placeholder = true
+  else
+    assign placeholder = false
+  endif
+
+  assign show_secondary_image = show_secondary_image | default: true
+  assign enable_hover_zoom = enable_hover_zoom | default: true
+  assign enable_image_overlay = enable_image_overlay | default: true
+  assign item_size = item_size | default: 'regular'
+%}
+
+<div class="photo-card photo-card--{{ item_size }}">
+  <a href="{{ product.url | default: '#' }}" class="photo-card__link" aria-label="{{ product.title | escape }}">
+    <div class="photo-card__frame">
+      <div class="photo-card__media">
+        {%- if placeholder -%}
+          <div class="photo-card__placeholder">
+            {{ 'product-1' | placeholder_svg_tag: 'photo-card__placeholder-svg' }}
+          </div>
+        {%- elsif product.featured_media -%}
+          <img
+            srcset="
+              {%- if product.featured_media.width >= 400 -%}{{ product.featured_media | image_url: width: 400 }} 400w,{%- endif -%}
+              {%- if product.featured_media.width >= 600 -%}{{ product.featured_media | image_url: width: 600 }} 600w,{%- endif -%}
+              {%- if product.featured_media.width >= 800 -%}{{ product.featured_media | image_url: width: 800 }} 800w,{%- endif -%}
+              {%- if product.featured_media.width >= 1000 -%}{{ product.featured_media | image_url: width: 1000 }} 1000w,{%- endif -%}
+              {%- if product.featured_media.width >= 1200 -%}{{ product.featured_media | image_url: width: 1200 }} 1200w,{%- endif -%}
+              {{ product.featured_media | image_url }} {{ product.featured_media.width }}w
+            "
+            src="{{ product.featured_media | image_url: width: 800 }}"
+            sizes="(min-width: 1200px) 400px, (min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw"
+            alt="{{ product.featured_media.alt | default: product.title | escape }}"
+            class="photo-card__image photo-card__image--primary{% if enable_hover_zoom %} photo-card__image--zoomable{% endif %}"
+            loading="lazy"
+            width="{{ product.featured_media.width }}"
+            height="{{ product.featured_media.height }}">
+
+          {%- if show_secondary_image and product.media[1] != nil -%}
+            <img
+              srcset="
+                {%- if product.media[1].width >= 400 -%}{{ product.media[1] | image_url: width: 400 }} 400w,{%- endif -%}
+                {%- if product.media[1].width >= 600 -%}{{ product.media[1] | image_url: width: 600 }} 600w,{%- endif -%}
+                {%- if product.media[1].width >= 800 -%}{{ product.media[1] | image_url: width: 800 }} 800w,{%- endif -%}
+                {%- if product.media[1].width >= 1000 -%}{{ product.media[1] | image_url: width: 1000 }} 1000w,{%- endif -%}
+                {{ product.media[1] | image_url }} {{ product.media[1].width }}w
+              "
+              src="{{ product.media[1] | image_url: width: 800 }}"
+              sizes="(min-width: 1200px) 400px, (min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw"
+              alt="{{ product.media[1].alt | default: product.title | escape }}"
+              class="photo-card__image photo-card__image--hover"
+              loading="lazy"
+              width="{{ product.media[1].width }}"
+              height="{{ product.media[1].height }}">
+          {%- endif -%}
+        {%- endif -%}
+
+        {% if enable_image_overlay %}
+          <div class="photo-card__gradient"></div>
+        {% endif %}
+
+        <div class="photo-card__shine"></div>
+      </div>
+
+      {%- unless placeholder -%}
+        <div class="photo-card__badges">
+          {% if product.tags contains 'new' %}
+            <span class="photo-card__badge photo-card__badge--new">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              New
+            </span>
+          {% endif %}
+          {% if product.metafields.custom.badge != blank %}
+            <span class="photo-card__badge photo-card__badge--custom">
+              {{ product.metafields.custom.badge }}
+            </span>
+          {% endif %}
+        </div>
+
+        <div class="photo-card__quick-view">
+          <span class="photo-card__quick-view-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </span>
+          <span class="photo-card__quick-view-text">View</span>
+        </div>
+      {%- endunless -%}
+    </div>
+
+    <div class="photo-card__content">
+      <h3 class="photo-card__title">
+        {%- if placeholder -%}
+          {{ 'onboarding.product_title' | t }}
+        {%- else -%}
+          {{ product.title | escape }}
+        {%- endif -%}
+      </h3>
+
+      {%- unless placeholder -%}
+        {% if product.metafields.custom.tagline != blank %}
+          <p class="photo-card__tagline">{{ product.metafields.custom.tagline }}</p>
+        {% elsif product.type != blank %}
+          <p class="photo-card__tagline">{{ product.type }}</p>
+        {% endif %}
+      {%- endunless -%}
+    </div>
+  </a>
+</div>

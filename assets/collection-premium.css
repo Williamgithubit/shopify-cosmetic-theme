@@ -6,17 +6,17 @@
 /* CSS Variables for Luxury Beauty Aesthetic */
 :root {
   --color-luxury-bg: #F5EDE6;
-  --color-luxury-gold: #D4A373;
-  --color-luxury-gold-dark: #B8936A;
-  --color-luxury-text: #2C2C2C;
-  --color-luxury-text-light: #666666;
-  --color-luxury-border: #E8DDD4;
+  --color-luxury-gold: var(--color-gold, #D4A373);
+  --color-luxury-gold-dark: var(--color-gold-hover, #B8936A);
+  --color-luxury-text: var(--color-text, #2C2C2C);
+  --color-luxury-text-light: var(--color-text-light, #666666);
+  --color-luxury-border: var(--color-border, #E8DDD4);
   --color-luxury-overlay: rgba(44, 44, 44, 0.4);
-  --font-heading: var(--font-heading-family);
-  --font-body: var(--font-body-family);
-  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+  --font-heading: var(--font-display, var(--font-heading-family));
+  --font-body-luxury: var(--font-body, var(--font-body-family));
+  --transition-smooth: var(--transition-slow, all 0.4s cubic-bezier(0.4, 0, 0.2, 1));
+  --shadow-soft: var(--shadow-card, 0 4px 20px rgba(0, 0, 0, 0.08));
+  --shadow-hover: var(--shadow-card-hover, 0 8px 30px rgba(0, 0, 0, 0.12));
 }
 
 /* ============================================
@@ -37,14 +37,15 @@
 }
 
 .collection-hero__promo-text {
+  font-family: var(--font-body);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: var(--space-3, 12px);
   margin: 0;
-  font-size: 1.4rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  font-size: var(--text-sm, 0.875rem);
+  font-weight: var(--font-medium, 500);
+  letter-spacing: var(--tracking-wide, 0.025em);
 }
 
 .collection-hero__promo-text svg {
@@ -132,11 +133,13 @@
 }
 
 .collection-hero__breadcrumbs {
+  font-family: var(--font-body);
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  font-size: 1.3rem;
+  gap: var(--space-3, 10px);
+  margin-bottom: var(--space-5, 20px);
+  font-size: var(--text-xs, 0.75rem);
+  letter-spacing: var(--tracking-wide, 0.025em);
   opacity: 0.9;
 }
 
@@ -163,12 +166,12 @@
 }
 
 .collection-hero__title {
-  font-family: var(--font-heading);
-  font-size: clamp(3.6rem, 5vw, 6rem);
-  font-weight: 400;
-  line-height: 1.2;
-  margin: 0 0 24px;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: var(--text-5xl, clamp(1.5rem, 3vw, 2rem));
+  font-weight: var(--font-normal, 400);
+  line-height: var(--leading-tight, 1.15);
+  margin: 0 0 var(--space-4, 1rem);
+  letter-spacing: var(--tracking-tight, -0.025em);
   color: white;
 }
 
@@ -177,9 +180,10 @@
 }
 
 .collection-hero__description {
-  font-size: 1.8rem;
-  line-height: 1.7;
-  margin: 0 0 20px;
+  font-family: var(--font-body);
+  font-size: var(--text-lg, 0.8125rem);
+  line-height: var(--leading-relaxed, 1.5);
+  margin: 0 0 var(--space-4, 1rem);
   max-width: 600px;
   color: rgba(255, 255, 255, 0.95);
 }
@@ -194,9 +198,10 @@
 }
 
 .collection-hero__count {
-  font-size: 1.4rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-family: var(--font-body);
+  font-size: var(--text-sm, 0.6875rem);
+  font-weight: var(--font-medium, 500);
+  letter-spacing: var(--tracking-wider, 0.05em);
   text-transform: uppercase;
   opacity: 0.9;
   margin: 0;
@@ -276,19 +281,20 @@
 }
 
 .collection-filters__title {
-  font-family: var(--font-heading);
-  font-size: 2.4rem;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl, 1rem);
+  font-weight: var(--font-normal, 400);
   margin: 0;
   color: var(--color-luxury-text);
 }
 
 .collection-filters__clear-all {
+  font-family: var(--font-body);
   background: none;
   border: none;
   color: var(--color-luxury-gold);
-  font-size: 1.3rem;
-  font-weight: 500;
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: var(--font-medium, 500);
   text-decoration: underline;
   cursor: pointer;
   padding: 0;
@@ -323,10 +329,11 @@
 }
 
 .collection-filter-group__label {
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-family: var(--font-body);
+  font-size: var(--text-base, 0.8125rem);
+  font-weight: var(--font-semibold, 600);
   color: var(--color-luxury-text);
-  letter-spacing: 0.01em;
+  letter-spacing: var(--tracking-normal, 0);
 }
 
 .collection-filter-group__icon {
@@ -379,11 +386,11 @@
 
 .collection-filter-price__input {
   width: 100%;
-  padding: 10px 12px 10px 26px;
+  padding: var(--space-3, 0.75rem) var(--space-3, 0.75rem) var(--space-3, 0.75rem) var(--space-6, 1.5rem);
   border: 1px solid var(--color-luxury-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md, 8px);
   font-family: var(--font-body);
-  font-size: 1.4rem;
+  font-size: var(--text-sm, 0.875rem);
   transition: var(--transition-smooth);
 }
 
@@ -460,7 +467,7 @@
 }
 
 .collection-filter-swatch__name {
-  font-size: 1.2rem;
+  font-size: 0.625rem;
   text-align: center;
   color: var(--color-luxury-text);
   line-height: 1.3;
@@ -566,12 +573,12 @@
 
 .collection-filter-list__text {
   flex: 1;
-  font-size: 1.4rem;
+  font-size: 0.75rem;
   color: var(--color-luxury-text);
 }
 
 .collection-filter-list__count {
-  font-size: 1.3rem;
+  font-size: 0.6875rem;
   color: var(--color-luxury-text-light);
 }
 
@@ -637,7 +644,7 @@
 }
 
 .collection-filters__results-count {
-  font-size: 1.5rem;
+  font-size: 0.75rem;
   color: var(--color-luxury-text-light);
   font-weight: 500;
 }
@@ -649,7 +656,7 @@
 }
 
 .collection-filters__sort-label {
-  font-size: 1.5rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--color-luxury-text);
 }
@@ -661,15 +668,15 @@
 
 .collection-filters__sort-select {
   appearance: none;
-  padding: 10px 40px 10px 16px;
+  padding: 8px 32px 8px 12px;
   border: 1px solid var(--color-luxury-border);
   border-radius: 8px;
   font-family: var(--font-body);
-  font-size: 1.4rem;
+  font-size: 0.75rem;
   background-color: white;
   cursor: pointer;
   transition: var(--transition-smooth);
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .collection-filters__sort-select:hover,
@@ -899,8 +906,8 @@
 }
 
 .collection-product-grid__pagination-info {
-  margin-top: 16px;
-  font-size: 1.4rem;
+  margin-top: 12px;
+  font-size: 0.75rem;
   color: var(--color-luxury-text-light);
 }
 
@@ -917,16 +924,16 @@
 
 .collection-product-grid__empty-title {
   font-family: var(--font-heading);
-  font-size: 3.2rem;
-  margin-bottom: 16px;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
   color: var(--color-luxury-text);
 }
 
 .collection-product-grid__empty-text {
-  font-size: 1.6rem;
+  font-size: 0.8125rem;
   color: var(--color-luxury-text-light);
-  margin-bottom: 30px;
-  line-height: 1.6;
+  margin-bottom: 24px;
+  line-height: 1.5;
 }
 
 /* ============================================
@@ -1118,7 +1125,7 @@
 }
 
 .product-card-premium__vendor {
-  font-size: 1.2rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-luxury-gold);
@@ -1127,7 +1134,7 @@
 
 .product-card-premium__title {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.4;
   color: var(--color-luxury-text);
@@ -1168,14 +1175,14 @@
 }
 
 .product-card-premium__swatch-more {
-  font-size: 1.2rem;
+  font-size: 0.625rem;
   color: var(--color-luxury-text-light);
   font-weight: 500;
 }
 
 /* Price */
 .product-card-premium__price {
-  font-size: 1.8rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-luxury-text);
   margin-top: auto;

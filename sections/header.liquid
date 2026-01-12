@@ -7,10 +7,14 @@
     <div class="page-width">
       <div class="header__inner">
         <div class="header__left">
-          <button class="header__menu-toggle" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+          <button
+            class="header__menu-toggle"
+            aria-label="Open menu"
+            aria-controls="mobile-menu"
+            aria-expanded="false">
             {% render 'icon-menu' %}
           </button>
-          
+
           {%- if settings.logo != blank -%}
             <a href="{{ routes.root_url }}" class="header__logo-link">
               <img
@@ -19,12 +23,11 @@
                 width="{{ settings.logo.width }}"
                 height="{{ settings.logo.height }}"
                 loading="eager"
-                class="header__logo-image"
-              >
+                class="header__logo-image">
             </a>
           {%- else -%}
             <a href="{{ routes.root_url }}" class="header__logo-text">
-              <span class="h2">{{ shop.name }}</span>
+              <span class="h6">{{ shop.name }}</span>
             </a>
           {%- endif -%}
         </div>
@@ -36,8 +39,9 @@
                 <a
                   href="{{ link.url }}"
                   class="header__menu-link{% if link.active %} header__menu-link--active{% endif %}"
-                  {% if link.current %}aria-current="page"{% endif %}
-                >
+                  {% if link.current %}
+                  aria-current="page"
+                  {% endif %}>
                   {{ link.title }}
                 </a>
               </li>
@@ -46,15 +50,24 @@
         </nav>
 
         <div class="header__right">
-          <a href="{{ routes.search_url }}" class="header__icon" aria-label="Search">
+          <a
+            href="{{ routes.search_url }}"
+            class="header__icon"
+            aria-label="Search">
             {% render 'icon-search' %}
           </a>
-          
-          <a href="{{ routes.account_url }}" class="header__icon" aria-label="Account">
+
+          <a
+            href="{{ routes.account_url }}"
+            class="header__icon"
+            aria-label="Account">
             {% render 'icon-account' %}
           </a>
 
-          <a href="{{ routes.cart_url }}" class="header__icon header__cart" aria-label="Cart">
+          <a
+            href="{{ routes.cart_url }}"
+            class="header__icon header__cart"
+            aria-label="Cart">
             {% render 'icon-cart' %}
             <span class="cart-count-bubble" data-cart-count="{{ cart.item_count }}">
               {%- if cart.item_count > 0 -%}
@@ -68,14 +81,21 @@
     </div>
   </div>
 
-  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <div
+    class="mobile-menu"
+    id="mobile-menu"
+    aria-hidden="true">
     <div class="mobile-menu__overlay"></div>
     <div class="mobile-menu__content">
       <div class="mobile-menu__header">
-        <button class="mobile-menu__close" aria-label="Close menu">
-          {% render 'icon-close' %}
-        </button>
+        <div class="mobile-menu__header-top">
+          <span class="mobile-menu__title">Menu</span>
+          <button class="mobile-menu__close" aria-label="Close menu">
+            {% render 'icon-close' %}
+          </button>
+        </div>
       </div>
+
       <nav class="mobile-menu__nav" role="navigation">
         <ul class="mobile-menu__list list-unstyled" role="list">
           {%- for link in linklists['main-menu-1'].links -%}
@@ -83,28 +103,45 @@
               <a
                 href="{{ link.url }}"
                 class="mobile-menu__link{% if link.active %} mobile-menu__link--active{% endif %}"
-                {% if link.current %}aria-current="page"{% endif %}
-              >
-                {{ link.title }}
+                {% if link.current %}
+                aria-current="page"
+                {% endif %}>
+                <span class="mobile-menu__link-text">{{ link.title }}</span>
+                <span class="mobile-menu__link-icon">
+                  {% render 'icon-caret-right' %}
+                </span>
               </a>
             </li>
           {%- endfor -%}
         </ul>
       </nav>
+
+      <div class="mobile-menu__footer">
+        <div class="mobile-menu__actions">
+          <a href="{{ routes.account_url }}" class="mobile-menu__action-link">
+            {% render 'icon-account' %}
+            <span>Account</span>
+          </a>
+          <a href="{{ routes.search_url }}" class="mobile-menu__action-link">
+            {% render 'icon-search' %}
+            <span>Search</span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </header>
 
 {% schema %}
-{
-  "name": "Header",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "menu",
-      "default": "main-menu",
-      "label": "Menu"
-    }
-  ]
-}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "default": "main-menu",
+        "label": "Menu"
+      }
+    ]
+  }
 {% endschema %}

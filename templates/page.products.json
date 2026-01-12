@@ -1,0 +1,25 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "main-products-gallery",
+      "settings": {
+        "title": "Products",
+        "heading_size": "large",
+        "enable_filters": true,
+        "source_collection": "premium",
+        "columns_desktop": 3,
+        "image_ratio": "portrait",
+        "show_secondary_image": true,
+        "enable_hover_zoom": true,
+        "enable_image_overlay": true,
+        "enable_infinite_scroll": true,
+        "products_per_page": 24,
+        "enable_masonry": true,
+        "show_category_filters": true,
+        "filter_collections": "skincare,haircare,makeup,fragrance"
+      }
+    }
+  },
+  "order": ["main"]
+}

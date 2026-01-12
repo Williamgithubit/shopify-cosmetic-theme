@@ -124,7 +124,7 @@ class CartDrawer {
       const footer = this.drawer.querySelector('.cart-drawer__footer');
       if (footer) footer.style.display = 'none';
     } else {
-      const itemsHTML = cart.items.map(item => this.renderCartItem(item)).join('');
+      const itemsHTML = cart.items.map((item, index) => this.renderCartItem(item, index)).join('');
       
       body.innerHTML = `
         <div class="cart-drawer__items">
@@ -145,32 +145,43 @@ class CartDrawer {
     }
   }
 
-  renderCartItem(item) {
+  renderCartItem(item, index) {
     const variantOptions = item.variant_options && item.variant_options.length > 0
       ? item.variant_options.map(opt => `<div class="cart-drawer__item-variant">${opt}</div>`).join('')
       : '';
+    
+    // Use 1-based index for line number (Shopify uses 1-indexed lines)
+    const lineNumber = index + 1;
 
     return `
-      <div class="cart-drawer__item" data-line="${item.line}">
+      <div class="cart-drawer__item" data-line="${lineNumber}" data-key="${item.key}">
         <img src="${item.image}" alt="${item.title}" class="cart-drawer__item-image" loading="lazy">
         <div class="cart-drawer__item-details">
           <h3 class="cart-drawer__item-title">${item.product_title}</h3>
           ${variantOptions}
           <div class="cart-drawer__item-price">${this.formatMoney(item.final_line_price)}</div>
           <div class="cart-drawer__item-quantity">
-            <button class="quantity-selector__button" data-action="decrease" data-line="${item.line}" aria-label="Decrease quantity">
+            <button class="quantity-selector__button" data-action="decrease" data-line="${lineNumber}" aria-label="Decrease quantity">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="4" y1="8" x2="12" y2="8"/>
               </svg>
             </button>
-            <input type="number" class="quantity-selector__input" value="${item.quantity}" min="0" data-line="${item.line}" aria-label="Quantity">
-            <button class="quantity-selector__button" data-action="increase" data-line="${item.line}" aria-label="Increase quantity">
+            <input type="number" class="quantity-selector__input" value="${item.quantity}" min="0" data-line="${lineNumber}" aria-label="Quantity">
+            <button class="quantity-selector__button" data-action="increase" data-line="${lineNumber}" aria-label="Increase quantity">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="8" y1="4" x2="8" y2="12"/>
                 <line x1="4" y1="8" x2="12" y2="8"/>
               </svg>
             </button>
-            <button class="cart-drawer__item-remove" data-line="${item.line}">Remove</button>
+            <button class="cart-drawer__item-remove" data-line="${lineNumber}" aria-label="Remove item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <line x1="10" y1="11" x2="10" y2="17"/>
+                <line x1="14" y1="11" x2="14" y2="17"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -213,13 +224,15 @@ class CartDrawer {
 
   async updateQuantity(line, quantity) {
     try {
+      // Ensure line is an integer (Shopify API requires integer)
+      const lineNumber = parseInt(line, 10);
       const response = await fetch('/cart/change.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          line: line,
+          line: lineNumber,
           quantity: quantity
         })
       });

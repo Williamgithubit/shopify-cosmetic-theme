@@ -1,0 +1,613 @@
+{% liquid
+  assign heading_size = section.settings.heading_size
+  assign columns_desktop = section.settings.columns_desktop
+  assign show_secondary_image = section.settings.show_secondary_image
+  assign enable_hover_zoom = section.settings.enable_hover_zoom
+  assign enable_image_overlay = section.settings.enable_image_overlay
+  assign enable_infinite_scroll = section.settings.enable_infinite_scroll
+  assign products_per_page = section.settings.products_per_page
+  assign show_category_filters = section.settings.show_category_filters
+  assign filter_collections = section.settings.filter_collections | split: ','
+  assign source_collection = section.settings.source_collection
+  assign show_search = section.settings.show_search
+  assign sort_option = section.settings.sort_option
+  assign color_scheme = section.settings.color_scheme
+%}
+
+{{ 'products-gallery.css' | asset_url | stylesheet_tag }}
+
+<section class="luxury-gallery luxury-gallery--{{ color_scheme }}" data-gallery-section>
+  <div class="luxury-gallery__container">
+    
+    <header class="luxury-gallery__header">
+      <div class="luxury-gallery__header-content">
+        <span class="luxury-gallery__subtitle">{{ section.settings.subtitle }}</span>
+        <h1 class="luxury-gallery__title luxury-gallery__title--{{ heading_size }}">
+          {{ section.settings.title }}
+        </h1>
+        <p class="luxury-gallery__description">{{ section.settings.description }}</p>
+      </div>
+
+      {% if show_search %}
+        <div class="luxury-gallery__search">
+          <div class="luxury-gallery__search-wrapper">
+            <svg class="luxury-gallery__search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input 
+              type="text" 
+              class="luxury-gallery__search-input" 
+              placeholder="Search products..." 
+              data-gallery-search
+              aria-label="Search products">
+          </div>
+        </div>
+      {% endif %}
+    </header>
+
+    {% if show_category_filters %}
+      <nav class="luxury-gallery__filters" aria-label="Product categories">
+        <div class="luxury-gallery__filters-scroll">
+          <button 
+            type="button"
+            class="luxury-gallery__filter-pill luxury-gallery__filter-pill--active" 
+            data-category="all"
+            aria-pressed="true">
+            <span class="luxury-gallery__filter-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </span>
+            <span>All</span>
+          </button>
+          {% for collection_handle in filter_collections %}
+            {% assign clean_handle = collection_handle | strip %}
+            {% assign collection = collections[clean_handle] %}
+            {% if collection %}
+              <button 
+                type="button"
+                class="luxury-gallery__filter-pill" 
+                data-category="{{ clean_handle | handleize }}"
+                aria-pressed="false">
+                <span class="luxury-gallery__filter-icon">
+                  {% case collection_handle | strip | downcase %}
+                    {% when 'skincare' %}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                      </svg>
+                    {% when 'haircare' %}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                        <path d="M12 6v12M6 12h12"></path>
+                      </svg>
+                    {% when 'makeup' %}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                      </svg>
+                    {% when 'fragrance' %}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path>
+                        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path>
+                      </svg>
+                    {% else %}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                      </svg>
+                    {% endcase %}
+                </span>
+                <span>{{ collection.title }}</span>
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </nav>
+    {% endif %}
+
+    <div class="luxury-gallery__toolbar">
+      <div class="luxury-gallery__results" data-results-count>
+        {% if source_collection != blank %}
+          {% assign collection_to_use = collections[source_collection] %}
+        {% else %}
+          {% assign collection_to_use = collections.all %}
+        {% endif %}
+        <span class="luxury-gallery__results-number">{{ collection_to_use.products_count }}</span> products
+      </div>
+      
+      <div class="luxury-gallery__sort">
+        <label for="gallery-sort" class="luxury-gallery__sort-label">Sort by:</label>
+        <select id="gallery-sort" class="luxury-gallery__sort-select" data-gallery-sort>
+          <option value="featured" {% if sort_option == 'featured' %}selected{% endif %}>Featured</option>
+          <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest</option>
+          <option value="title-asc" {% if sort_option == 'title-asc' %}selected{% endif %}>A - Z</option>
+          <option value="title-desc" {% if sort_option == 'title-desc' %}selected{% endif %}>Z - A</option>
+        </select>
+      </div>
+    </div>
+
+    {% if source_collection != blank %}
+      {% assign collection_to_use = collections[source_collection] %}
+    {% else %}
+      {% assign collection_to_use = collections.all %}
+    {% endif %}
+
+    {% comment %} Debug: Check if collection exists and has products {% endcomment %}
+    {% if collection_to_use == blank or collection_to_use.products.size == 0 %}
+      <div class="luxury-gallery__empty" style="display: flex;">
+        <div class="luxury-gallery__empty-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+        </div>
+        <h3 class="luxury-gallery__empty-title">No products available</h3>
+        <p class="luxury-gallery__empty-text">Please add products to your store or select a valid source collection in the theme settings.</p>
+      </div>
+    {% else %}
+    {% paginate collection_to_use.products by products_per_page %}
+      <div class="luxury-gallery__grid luxury-gallery__grid--cols-{{ columns_desktop }}" data-products-grid>
+        {% for product in collection_to_use.products %}
+          {% assign product_collections = '' %}
+          {% for collection_handle in filter_collections %}
+            {% assign clean_col_handle = collection_handle | strip %}
+            {% assign collection = collections[clean_col_handle] %}
+            {% if collection and collection.products contains product %}
+              {% assign product_collections = product_collections | append: clean_col_handle | append: ',' %}
+            {% endif %}
+          {% endfor %}
+          
+          {% assign item_size = 'regular' %}
+          {% assign item_index = forloop.index | modulo: 7 %}
+          {% if item_index == 1 or item_index == 5 %}
+            {% assign item_size = 'large' %}
+          {% endif %}
+          
+          <article 
+            class="luxury-gallery__item luxury-gallery__item--{{ item_size }}"
+            data-product-item
+            data-category="{{ product.type | handleize }}"
+            data-tags="{{ product.tags | join: ',' | handleize }}"
+            data-collections="{{ product_collections | handleize }}"
+            data-title="{{ product.title | downcase }}"
+            style="--animation-delay: {{ forloop.index | times: 0.05 }}s">
+            {% render 'gallery-product-card',
+              product: product,
+              show_secondary_image: show_secondary_image,
+              enable_hover_zoom: enable_hover_zoom,
+              enable_image_overlay: enable_image_overlay,
+              item_size: item_size
+            %}
+          </article>
+        {% endfor %}
+      </div>
+
+      {% if paginate.pages > 1 %}
+        <div class="luxury-gallery__pagination" data-pagination>
+          {% if enable_infinite_scroll %}
+            <div class="luxury-gallery__load-more">
+              {% if paginate.next %}
+                <button
+                  type="button"
+                  class="luxury-gallery__load-btn"
+                  data-load-more
+                  data-next-url="{{ paginate.next.url }}">
+                  <span class="luxury-gallery__load-btn-text">Discover More</span>
+                  <span class="luxury-gallery__load-btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M5 12l7 7 7-7"></path>
+                    </svg>
+                  </span>
+                  <span class="luxury-gallery__load-spinner" aria-hidden="true">
+                    <svg class="spinner" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.25"/>
+                      <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                </button>
+              {% endif %}
+              <div class="luxury-gallery__progress">
+                <div class="luxury-gallery__progress-bar">
+                  <div class="luxury-gallery__progress-fill" style="width: {{ paginate.current_page | times: 100 | divided_by: paginate.pages }}%"></div>
+                </div>
+                <span class="luxury-gallery__progress-text">
+                  Showing {{ paginate.current_offset | plus: paginate.items.size }} of {{ collection_to_use.products_count }}
+                </span>
+              </div>
+            </div>
+          {% else %}
+            {% render 'pagination', paginate: paginate %}
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endpaginate %}
+    {% endif %}
+
+    <div class="luxury-gallery__empty" data-empty-state style="display: none;">
+      <div class="luxury-gallery__empty-icon">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </div>
+      <h3 class="luxury-gallery__empty-title">No products found</h3>
+      <p class="luxury-gallery__empty-text">Try adjusting your search or filter to find what you're looking for.</p>
+      <button type="button" class="luxury-gallery__empty-btn" data-reset-filters>View All Products</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const gallery = document.querySelector('[data-gallery-section]');
+  if (!gallery) return;
+
+  const grid = gallery.querySelector('[data-products-grid]');
+  const items = gallery.querySelectorAll('[data-product-item]');
+  const filterPills = gallery.querySelectorAll('[data-category]');
+  const searchInput = gallery.querySelector('[data-gallery-search]');
+  const sortSelect = gallery.querySelector('[data-gallery-sort]');
+  const emptyState = gallery.querySelector('[data-empty-state]');
+  const resetBtn = gallery.querySelector('[data-reset-filters]');
+  const resultsCount = gallery.querySelector('[data-results-count]');
+  const loadMoreBtn = gallery.querySelector('[data-load-more]');
+
+  let activeCategory = 'all';
+  let searchTerm = '';
+
+  function filterProducts() {
+    let visibleCount = 0;
+    
+    items.forEach((item, index) => {
+      const collections = item.dataset.collections || '';
+      const title = item.dataset.title || '';
+      const matchesCategory = activeCategory === 'all' || collections.includes(activeCategory);
+      const matchesSearch = !searchTerm || title.includes(searchTerm.toLowerCase());
+      
+      if (matchesCategory && matchesSearch) {
+        item.style.display = '';
+        item.style.setProperty('--animation-delay', `${visibleCount * 0.05}s`);
+        item.classList.add('luxury-gallery__item--visible');
+        visibleCount++;
+      } else {
+        item.style.display = 'none';
+        item.classList.remove('luxury-gallery__item--visible');
+      }
+    });
+
+    if (resultsCount) {
+      resultsCount.innerHTML = `<span class="luxury-gallery__results-number">${visibleCount}</span> products`;
+    }
+
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'flex' : 'none';
+    }
+    if (grid) {
+      grid.style.display = visibleCount === 0 ? 'none' : '';
+    }
+  }
+
+  filterPills.forEach(pill => {
+    pill.addEventListener('click', function() {
+      filterPills.forEach(p => {
+        p.classList.remove('luxury-gallery__filter-pill--active');
+        p.setAttribute('aria-pressed', 'false');
+      });
+      this.classList.add('luxury-gallery__filter-pill--active');
+      this.setAttribute('aria-pressed', 'true');
+      activeCategory = this.dataset.category;
+      filterProducts();
+    });
+  });
+
+  if (searchInput) {
+    let debounceTimer;
+    searchInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        searchTerm = this.value.trim();
+        filterProducts();
+      }, 300);
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      activeCategory = 'all';
+      searchTerm = '';
+      if (searchInput) searchInput.value = '';
+      filterPills.forEach(p => {
+        p.classList.remove('luxury-gallery__filter-pill--active');
+        p.setAttribute('aria-pressed', 'false');
+      });
+      const allPill = gallery.querySelector('[data-category="all"]');
+      if (allPill) {
+        allPill.classList.add('luxury-gallery__filter-pill--active');
+        allPill.setAttribute('aria-pressed', 'true');
+      }
+      filterProducts();
+    });
+  }
+
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', async function() {
+      const nextUrl = this.dataset.nextUrl;
+      if (!nextUrl) return;
+
+      this.classList.add('is-loading');
+      
+      try {
+        const response = await fetch(nextUrl);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const newItems = doc.querySelectorAll('[data-product-item]');
+        const newLoadMore = doc.querySelector('[data-load-more]');
+        const progressFill = gallery.querySelector('.luxury-gallery__progress-fill');
+        const progressText = gallery.querySelector('.luxury-gallery__progress-text');
+
+        newItems.forEach((item, index) => {
+          item.style.setProperty('--animation-delay', `${index * 0.05}s`);
+          grid.appendChild(item);
+        });
+
+        if (newLoadMore) {
+          this.dataset.nextUrl = newLoadMore.dataset.nextUrl;
+          if (progressFill) {
+            const newProgress = doc.querySelector('.luxury-gallery__progress-fill');
+            if (newProgress) progressFill.style.width = newProgress.style.width;
+          }
+          if (progressText) {
+            const newText = doc.querySelector('.luxury-gallery__progress-text');
+            if (newText) progressText.textContent = newText.textContent;
+          }
+        } else {
+          this.parentElement.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error loading more products:', error);
+      } finally {
+        this.classList.remove('is-loading');
+      }
+    });
+  }
+
+  // Initialize products visibility on page load
+  function initializeProducts() {
+    items.forEach((item, index) => {
+      item.style.setProperty('--animation-delay', `${index * 0.05}s`);
+      // Use IntersectionObserver for scroll-based animation
+      if ('IntersectionObserver' in window) {
+        observeItem(item);
+      } else {
+        // Fallback: show all items immediately
+        item.classList.add('luxury-gallery__item--visible');
+      }
+    });
+  }
+
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '50px 0px 50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('luxury-gallery__item--visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  function observeItem(item) {
+    observer.observe(item);
+  }
+
+  // Initialize on page load
+  initializeProducts();
+});
+</script>
+
+{% schema %}
+  {
+    "name": "Products Gallery",
+    "tag": "section",
+    "class": "section-products-gallery",
+    "settings": [
+      {
+        "type": "select",
+        "id": "color_scheme",
+        "label": "Color scheme",
+        "options": [
+          {
+            "value": "light",
+            "label": "Light"
+          },
+          {
+            "value": "soft",
+            "label": "Soft Pink"
+          },
+          {
+            "value": "cream",
+            "label": "Cream"
+          }
+        ],
+        "default": "light"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Subtitle",
+        "default": "Our Collection"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Products"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description",
+        "default": "Discover our curated selection of premium beauty essentials"
+      },
+      {
+        "type": "select",
+        "id": "heading_size",
+        "label": "Heading size",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ],
+        "default": "large"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_search",
+        "label": "Show search bar",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "sort_option",
+        "label": "Default sort",
+        "options": [
+          {
+            "value": "featured",
+            "label": "Featured"
+          },
+          {
+            "value": "newest",
+            "label": "Newest"
+          },
+          {
+            "value": "title-asc",
+            "label": "A - Z"
+          },
+          {
+            "value": "title-desc",
+            "label": "Z - A"
+          }
+        ],
+        "default": "featured"
+      },
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_masonry",
+        "label": "Enable masonry layout",
+        "default": true,
+        "info": "Creates a Pinterest-style staggered grid"
+      }, {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "label": "Number of columns on desktop",
+        "default": 3
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "label": "Product image ratio",
+        "options": [
+          {
+            "value": "portrait",
+            "label": "Portrait (4:5)"
+          }, {
+            "value": "square",
+            "label": "Square (1:1)"
+          }, {
+            "value": "landscape",
+            "label": "Landscape (16:9)"
+          }
+        ],
+        "default": "portrait"
+      }, {
+        "type": "header",
+        "content": "Product Card Features"
+      }, {
+        "type": "checkbox",
+        "id": "show_secondary_image",
+        "label": "Show secondary image on hover",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "enable_hover_zoom",
+        "label": "Enable image zoom on hover",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "enable_image_overlay",
+        "label": "Enable image overlay on hover",
+        "default": true
+      }, {
+        "type": "header",
+        "content": "Filtering"
+      }, {
+        "type": "checkbox",
+        "id": "enable_filters",
+        "label": "Enable filtering",
+        "default": true
+      }, {
+        "type": "checkbox",
+        "id": "show_category_filters",
+        "label": "Show category filters",
+        "default": true,
+        "info": "Display pill-style category filters at the top"
+      }, {
+        "type": "collection",
+        "id": "source_collection",
+        "label": "Source collection",
+        "info": "Products from this collection will be displayed"
+      }, {
+        "type": "text",
+        "id": "filter_collections",
+        "label": "Filter collections (comma-separated)",
+        "default": "skincare,haircare,makeup,fragrance",
+        "info": "Enter collection handles separated by commas"
+      }, {
+        "type": "header",
+        "content": "Pagination"
+      }, {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 8,
+        "max": 48,
+        "step": 4,
+        "label": "Products per page",
+        "default": 24
+      }, {
+        "type": "checkbox",
+        "id": "enable_infinite_scroll",
+        "label": "Enable infinite scroll",
+        "default": true,
+        "info": "Load more products automatically or with a button"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Products Gallery",
+        "category": "Collection"
+      }
+    ]
+  }
+{% endschema %}

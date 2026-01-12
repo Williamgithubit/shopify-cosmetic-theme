@@ -278,17 +278,17 @@
   }
 
   .contact-form__heading {
-    font-size: clamp(2.8rem, 4vw, 4.2rem);
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
     font-weight: 700;
-    margin-bottom: var(--spacing-md, 16px);
+    margin-bottom: var(--spacing-sm, 8px);
     color: var(--color-text, #2c2c2c);
   }
 
   .contact-form__subheading {
-    font-size: 1.8rem;
+    font-size: 0.8125rem;
     color: #666;
-    line-height: 1.6;
-    margin-bottom: var(--spacing-xl, 32px);
+    line-height: 1.5;
+    margin-bottom: var(--spacing-lg, 24px);
   }
 
   .contact-form__trust-badges {
@@ -301,12 +301,12 @@
   .trust-badge {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm, 8px);
-    padding: var(--spacing-sm, 8px) var(--spacing-lg, 24px);
+    gap: var(--spacing-xs, 4px);
+    padding: 6px 14px;
     background: rgba(212, 165, 116, 0.1);
     border-radius: var(--radius-full, 9999px);
     color: var(--color-primary, #d4a574);
-    font-size: 1.4rem;
+    font-size: 0.6875rem;
     font-weight: 600;
   }
 
@@ -366,9 +366,9 @@
 
   .form-label {
     display: block;
-    font-size: 1.5rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-sm, 8px);
+    margin-bottom: var(--spacing-xs, 4px);
     color: var(--color-text, #2c2c2c);
   }
 
@@ -379,17 +379,17 @@
   .optional {
     font-weight: 400;
     color: #999;
-    font-size: 1.3rem;
+    font-size: 0.625rem;
   }
 
   .form-input,
   .form-select,
   .form-textarea {
     width: 100%;
-    padding: var(--spacing-md, 16px) var(--spacing-lg, 24px);
+    padding: 10px 14px;
     border: 2px solid #e5e5e5;
     border-radius: var(--radius-md, 8px);
-    font-size: 1.6rem;
+    font-size: 0.75rem;
     font-family: inherit;
     background: white;
     transition: all var(--transition-fast, 0.15s);
@@ -427,25 +427,25 @@
   .form-error {
     display: block;
     margin-top: var(--spacing-xs, 4px);
-    font-size: 1.3rem;
+    font-size: 0.625rem;
     color: #d32f2f;
   }
 
   .contact-form__submit {
     width: 100%;
-    padding: var(--spacing-lg, 24px) var(--spacing-2xl, 48px);
+    padding: 12px 24px;
     background: linear-gradient(135deg, var(--color-primary, #d4a574) 0%, var(--color-secondary, #c89563) 100%);
     color: white;
     border: none;
     border-radius: var(--radius-md, 8px);
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base, 0.25s);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm, 8px);
+    gap: var(--spacing-xs, 4px);
   }
 
   .contact-form__submit:hover:not(:disabled) {
